@@ -1,9 +1,19 @@
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  Modal,
+  Image,
+  KeyboardAvoidingView,
+} from "react-native";
 import CustomModal from "./components/CustomModal";
 import ItemsList from "./components/ItemsList";
-import OpenModalButton from "./components/OpenModalBtutton";
+import ModalOpener from "./components/ModalOpener";
 
 export default function App() {
   const [inputValue, setInputValue] = useState("");
@@ -24,7 +34,7 @@ export default function App() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <OpenModalButton onPress={onOpenModal} />
+      <ModalOpener onOpenModal={onOpenModal} />
       <ItemsList data={inputResult} />
       <CustomModal
         isModalVisible={isModalVisible}

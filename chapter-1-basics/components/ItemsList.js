@@ -1,7 +1,6 @@
 import { View, FlatList, Text, StyleSheet } from "react-native";
 
 export default function ItemsList({ data }) {
-  console.log(data);
   return (
     <View style={styles.resultContainer}>
       <FlatList

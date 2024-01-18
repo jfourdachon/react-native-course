@@ -8,6 +8,7 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import CustomBtn from "./UI/CustomBtn";
 
 export default function CustomModal({
   isModalVisible,
@@ -18,10 +19,10 @@ export default function CustomModal({
 }) {
   return (
     <Modal visible={isModalVisible} animationType="slide">
-      <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={styles.keyboardView} behavior="height">
         <View style={styles.modalView}>
           <Image
-            source={require("../assets/images/logo-react-native.png")}
+            source={require("../assets/logo-react-native.png")}
             style={styles.image}
           />
           <View style={styles.formContainer}>
@@ -30,20 +31,9 @@ export default function CustomModal({
               onChangeText={setInputValue}
               style={styles.input}
             />
-
             <View style={styles.modalBtnContainer}>
-              <TouchableOpacity
-                style={[styles.createBtn, styles.modalBtns]}
-                onPress={onCreateItem}
-              >
-                <Text style={styles.modalBtnText}>Créer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.closeBtn, styles.modalBtns]}
-                onPress={onCloseModal}
-              >
-                <Text style={styles.modalBtnText}>Fermer</Text>
-              </TouchableOpacity>
+              <CustomBtn text="Créer" onPress={onCreateItem} color="blue" />
+              <CustomBtn text="Fermer" onPress={onCloseModal} color="black" />
             </View>
           </View>
         </View>
@@ -53,6 +43,9 @@ export default function CustomModal({
 }
 
 const styles = StyleSheet.create({
+  keyboardView: {
+    flex: 1,
+  },
   modalView: {
     flex: 1,
     backgroundColor: "grey",
@@ -61,9 +54,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   image: {
-    width: 200,
-    height: 200,
-    borderRadius: 16,
+    width: 260,
+    height: 260,
+    borderRadius: 12,
   },
   formContainer: {
     width: "100%",
@@ -83,23 +76,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-between",
-  },
-  modalBtns: {
-    width: "40%",
-    height: 50,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 16,
-  },
-  createBtn: {
-    backgroundColor: "blue",
-  },
-  closeBtn: {
-    backgroundColor: "black",
-  },
-  modalBtnText: {
-    color: "white",
-    fontSize: 20,
   },
 });

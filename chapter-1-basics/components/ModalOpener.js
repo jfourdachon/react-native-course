@@ -1,12 +1,12 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
-export default function OpenModalButton({ onPress }) {
+export default function ModalOpener({ onOpenModal }) {
   return (
     <View style={styles.btnContainer}>
       <TouchableOpacity
         activeOpacity={0.9}
         style={styles.btn}
-        onPress={onPress}
+        onPress={onOpenModal}
       >
         <Text style={styles.btnText}>Ajouter un élément</Text>
       </TouchableOpacity>
