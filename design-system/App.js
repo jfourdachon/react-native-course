@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
 import { colors } from "./constants/colors";
 import { radius } from "./constants/radius";
@@ -7,8 +7,11 @@ import { padding } from "./constants/padding";
 import { margin } from "./constants/margin";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import InternetIcon from "./assets/icons/internet-svgrepo-com.svg";
+import { TextM, TextXL } from "./components/text";
+import ItemCard from "./components/ItemCard";
+import { data } from "./data";
 
-const CARD_PADDING = 20;
+const CARD_PADDING = 14;
 export default function App() {
   const [fontLoaded] = useFonts({
     "Inter-Regular": require("./assets/fonts/Inter-Regular.ttf"),
@@ -18,16 +21,18 @@ export default function App() {
   return fontLoaded ? (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={[styles.card, { backgroundColor: colors.VIOLET }]}>
-        <View style={styles.cardContent}>
-          <AntDesign name="exclamationcircle" size={32} color={colors.DARK} />
-        </View>
-      </View>
-      <View style={[styles.card, { backgroundColor: colors.GREY }]}>
-        <View style={styles.cardContent}>
-          <Entypo name="circle-with-cross" size={32} color={colors.DARK} />
-        </View>
-      </View>
+      <ItemCard
+        backgroundColor={data[0].color}
+        icon={data[0].icon}
+        title={data[0].title}
+        description={data[0].description}
+      />
+      <ItemCard
+        backgroundColor={data[1].color}
+        icon={data[1].icon}
+        title={data[1].title}
+        description={data[1].description}
+      />
       <View style={[styles.card, { backgroundColor: colors.PURPLE }]}>
         <View style={styles.cardContent}>
           <InternetIcon width={32} height={32} color={colors.PURPLE} />
@@ -64,7 +69,14 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: radius.MEDIUM,
     backgroundColor: colors.LIGHT,
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
     padding: CARD_PADDING,
+  },
+  textContainer: {
+    flex: 1,
+    height: "100%",
+    paddingLeft: CARD_PADDING,
+    justifyContent: "space-evenly",
   },
 });
