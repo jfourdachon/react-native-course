@@ -21,19 +21,22 @@ export default function App() {
   return fontLoaded ? (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <ItemCard
-        backgroundColor={data[0].color}
-        icon={data[0].icon}
-        title={data[0].title}
-        description={data[0].description}
-      />
-      <ItemCard
-        backgroundColor={data[1].color}
-        icon={data[1].icon}
+      {data.map((item) => (
+        <ItemCard
+          color={item.color}
+          Logo={item.logo}
+          title={item.title}
+          description={item.description}
+        />
+      ))}
+
+      {/* <ItemCard
+        color={data[1].color}
+        Logo={data[1].logo}
         title={data[1].title}
         description={data[1].description}
-      />
-      <View style={[styles.card, { backgroundColor: colors.PURPLE }]}>
+      /> */}
+      {/* <View style={[styles.card, { backgroundColor: colors.PURPLE }]}>
         <View style={styles.cardContent}>
           <InternetIcon width={32} height={32} color={colors.PURPLE} />
         </View>
@@ -43,7 +46,7 @@ export default function App() {
       </View>
       <View style={[styles.card, { backgroundColor: colors.DARK }]}>
         <View style={styles.cardContent} />
-      </View>
+      </View> */}
     </View>
   ) : null;
 }

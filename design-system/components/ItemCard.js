@@ -6,16 +6,11 @@ import { radius } from "../constants/radius";
 
 const CARD_PADDING = 14;
 
-export default function ItemCard({
-  backgroundColor,
-  icon,
-  title,
-  description,
-}) {
+export default function ItemCard({ color, Logo, title, description }) {
   return (
-    <View style={[styles.card, { backgroundColor }]}>
+    <View style={[styles.card, { backgroundColor: color }]}>
       <View style={styles.cardContent}>
-        {icon}
+        <Logo width={50} height={50} color={color} />
         <View style={styles.textContainer}>
           <TextXL>{title}</TextXL>
           <TextM>{description}</TextM>
