@@ -4,8 +4,6 @@ import {
   View,
   Image,
   TextInput,
-  TouchableOpacity,
-  Text,
   StyleSheet,
 } from "react-native";
 import CustomBtn from "./UI/CustomBtn";
