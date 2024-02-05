@@ -1,8 +1,8 @@
 import { View, StyleSheet } from "react-native";
-import { TextM, TextXL } from "./text";
-import { margin } from "../constants/margin";
 import { colors } from "../constants/colors";
+import { margin } from "../constants/margin";
 import { radius } from "../constants/radius";
+import { TextM, TextXL } from "./text";
 
 const CARD_PADDING = 14;
 
@@ -23,7 +23,7 @@ export default function ItemCard({ color, Logo, title, description }) {
 const styles = StyleSheet.create({
   card: {
     width: "100%",
-    height: "15%",
+    height: 140,
     borderWidth: 1,
     marginVertical: margin.VERTICAL_SEPARATOR,
     borderRadius: radius.MEDIUM,
