@@ -1,6 +1,5 @@
 import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import { useFonts } from "expo-font";
-import List from "./components/List";
 
 export default function App() {
   const [fontLoaded] = useFonts({

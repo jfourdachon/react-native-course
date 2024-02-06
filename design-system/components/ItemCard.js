@@ -1,7 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { TextM, TextXL } from "./text";
 import { colors } from "../constants/colors";
-import { margin } from "../constants/margin";
 import { radius } from "../constants/radius";
 
 const CARD_PADDING = 14;
