@@ -1,5 +1,9 @@
-import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView, FlatList } from "react-native";
 import { useFonts } from "expo-font";
+import { data } from "./data/index";
+import ItemCard from "./components/ItemCard";
+import { padding } from "./constants/padding";
+import ListItemSeparator from "./components/ListItemSeparator";
 
 export default function App() {
   const [fontLoaded] = useFonts({
@@ -12,6 +16,7 @@ export default function App() {
       <StatusBar style="auto" />
       <FlatList
         style={styles.listContainer}
+        ItemSeparatorComponent={ListItemSeparator}
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
