@@ -1,8 +1,8 @@
 import { View, StyleSheet } from "react-native";
+import { TextM, TextXL } from "./text";
 import { colors } from "../constants/colors";
 import { margin } from "../constants/margin";
 import { radius } from "../constants/radius";
-import { TextM, TextXL } from "./text";
 
 const CARD_PADDING = 14;
 
@@ -12,7 +12,7 @@ export default function ItemCard({ color, Logo, title, description }) {
       <View style={styles.cardContent}>
         <Logo width={50} height={50} color={color} />
         <View style={styles.textContainer}>
-          <TextXL>{title}</TextXL>
+          <TextXL color={colors.PURPLE}>{title}</TextXL>
           <TextM>{description}</TextM>
         </View>
       </View>
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 140,
     borderWidth: 1,
-    marginVertical: margin.VERTICAL_SEPARATOR,
     borderRadius: radius.MEDIUM,
     padding: CARD_PADDING,
   },

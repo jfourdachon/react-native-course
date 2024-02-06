@@ -11,7 +11,19 @@ export default function App() {
   return fontLoaded ? (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <List />
+      <FlatList
+        style={styles.listContainer}
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ItemCard
+            color={item.color}
+            title={item.title}
+            description={item.description}
+            Logo={item.logo}
+          />
+        )}
+      />
     </SafeAreaView>
   ) : null;
 }
@@ -22,5 +34,10 @@ const styles = StyleSheet.create({
     backgroundColor: "fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  listContainer: {
+    width: "100%",
+    paddingHorizontal: padding.HORIZONTAL_SCREEN,
+    marginTop: 8,
   },
 });
