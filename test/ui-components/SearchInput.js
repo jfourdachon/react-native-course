@@ -3,6 +3,8 @@ import React from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { colors } from "../constants/colors";
 import { textSize } from "../constants/textSize";
+import { radius } from "../constants/radius";
+import { spaces } from "../constants/space";
 
 const SearchInput = () => {
   return (
@@ -30,9 +32,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
-    borderRadius: 99,
-    height: 60,
-    marginHorizontal: 24,
+    borderRadius: radius.FULL,
+    height: 50,
+    marginHorizontal: spaces.L,
   },
   searchIcon: {
     paddingHorizontal: 12,

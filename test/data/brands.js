@@ -4,4 +4,8 @@ export const brands = [
   { name: "reebok", logo: require("../assets/icon/brand/reebok.png") },
   { name: "converse", logo: require("../assets/icon/brand/converse.png") },
   { name: "puma", logo: require("../assets/icon/brand/puma.png") },
+  {
+    name: "under Armour",
+    logo: require("../assets/icon/brand/under-armour.png"),
+  },
 ];

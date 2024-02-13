@@ -6,11 +6,12 @@ import { spaces } from "../constants/space";
 import { textSize } from "../constants/textSize";
 
 const SIZE = 32;
-const BrandItem = ({ item, isBrandSelected, selectedBrand }) => {
+const BrandItem = ({ item, isBrandSelected, selectedBrand, count, index }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={() => selectedBrand(item.name)}
+      style={{ marginRight: index === count - 1 ? 0 : spaces.M }}
     >
       {isBrandSelected === item.name ? (
         <View style={styles.brandSelectedContainer}>
@@ -39,6 +40,14 @@ const BrandItem = ({ item, isBrandSelected, selectedBrand }) => {
             padding: spaces.S,
             borderRadius: radius.FULL,
             marginTop: spaces.S,
+            elevation: 2,
+            shadowColor: colors.DARK,
+            shadowOffset: {
+              width: 2,
+              height: 2,
+            },
+            shadowOpacity: 0.2,
+            shadowRadius: 2,
           }}
         >
           <Image

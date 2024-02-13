@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import SearchInput from "../../../ui-components/SearchInput";
 import BrandsList from "./BrandsList";
+import SearchInput from "../../../../ui-components/SearchInput";
+import { spaces } from "../../../../constants/space";
 
 const SearchSection = () => {
   return (
     <View
       style={{
-        flex: 0.23,
+        flex: 0.25,
         width: "100%",
         flexDirection: "column",
-        paddingTop: 12,
+        paddingTop: spaces.S,
         justifyContent: "space-around",
       }}
     >
