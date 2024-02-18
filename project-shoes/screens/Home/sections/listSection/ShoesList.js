@@ -18,7 +18,7 @@ const ShoesList = ({ selectedBrand, searchInputValue }) => {
         elem.name.toLowerCase().includes(searchInputValue.toLowerCase())
       )
     : data;
-  console.log("flalit");
+
   return (
     <FlatList
       horizontal
