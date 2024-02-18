@@ -14,9 +14,7 @@ export default function App() {
   const [inputResult, setInpuResult] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const onOpenModal = () => {
-    // console.log("before", isModalVisible);
     setModalVisible(true);
-    // console.log("after", isModalVisible);
   };
   const onCloseModal = () => {
     setModalVisible(false);
