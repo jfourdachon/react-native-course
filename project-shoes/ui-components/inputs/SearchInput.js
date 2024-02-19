@@ -1,53 +1,46 @@
 import { StyleSheet, TextInput, View } from "react-native";
-import React from "react";
-import { EvilIcons } from "@expo/vector-icons";
 import { colors } from "../../constants/colors";
-import { textSize } from "../../constants/textSize";
 import { radius } from "../../constants/radius";
+import { EvilIcons } from "@expo/vector-icons";
+import { textSize } from "../../constants/textSize";
+import { ICON_SIZE } from "../../constants/sizes";
 import { spaces } from "../../constants/space";
 
-const SearchInput = ({ inputSearchHandler, placeholder }) => {
-  const onChangeText = (value) => {
-    inputSearchHandler(value);
-  };
+export default function SearchInput({ placeholder, value, onChangeText }) {
   return (
-    <View style={styles.searchInputContainer}>
+    <View style={styles.inputContainer}>
       <EvilIcons
         name="search"
-        size={32}
+        size={ICON_SIZE}
         color={colors.GREY}
         style={styles.searchIcon}
       />
       <TextInput
-        style={styles.input}
         placeholder={placeholder}
+        value={value}
         onChangeText={onChangeText}
+        style={styles.input}
       />
     </View>
   );
-};
-
-export default SearchInput;
+}
 
 const styles = StyleSheet.create({
-  searchInputContainer: {
+  inputContainer: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: colors.WHITE,
+    marginHorizontal: spaces.L,
     borderRadius: radius.FULL,
     height: 50,
-    marginHorizontal: spaces.L,
   },
   searchIcon: {
-    paddingHorizontal: 12,
+    marginHorizontal: spaces.M,
   },
   input: {
     flex: 1,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    // paddingLeft: 0,
+    paddingVertical: spaces.S,
+    paddingRight: spaces.S,
     color: colors.GREY,
     fontFamily: "Regular",
     fontSize: textSize.M,
