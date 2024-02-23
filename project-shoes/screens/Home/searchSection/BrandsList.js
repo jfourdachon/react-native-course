@@ -1,8 +1,8 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
-import { brands } from "../../../../data/brands";
 import BrandItem from "./BrandItem";
 import { spaces } from "../../../../constants/space";
+import { brands } from "../../../../data/brands";
 
 const BrandsList = ({ selectedBrand, selectBrand }) => {
   return (

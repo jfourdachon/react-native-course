@@ -1,9 +1,9 @@
 import { SafeAreaView, StyleSheet, View, StatusBar, Text } from "react-native";
 import { colors } from "../../constants/colors";
 import { useState } from "react";
-import ListSection from "./sections/listSection";
-import SearchSection from "./sections/searchSection";
-import NewsSection from "./sections/newsSection";
+import ListSection from "./listSection";
+import SearchSection from "./searchSection";
+import NewsSection from "./newsSection";
 
 export default function HomeScreen() {
   const [selectedBrand, setSelectedBrand] = useState("nike");

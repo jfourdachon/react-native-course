@@ -1,8 +1,8 @@
 import { FlatList } from "react-native";
 import React, { useMemo } from "react";
-import { shoes } from "../../../../data/shoes";
-import VerticalCard from "../../../../ui-components/cards/VerticalCard";
-import { spaces } from "../../../../constants/space";
+import { shoes } from "../../../data/shoes";
+import VerticalCard from "../../../ui-components/cards/VerticalCard";
+import { spaces } from "../../../constants/space";
 import ItemSeparator from "./ItemSeparator";
 import ShoesListEmpty from "./ShoesListEmpty";
 

@@ -95,7 +95,7 @@ export const shoes = [
       },
       {
         id: "nik04p",
-        name: "P 6000",
+        name: "Pegasus",
         gender: "u",
         items: [
           {
