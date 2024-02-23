@@ -1,10 +1,10 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import { colors } from "../../constants/colors";
+import { spaces } from "../../constants/spaces";
 import { radius } from "../../constants/radius";
 import { EvilIcons } from "@expo/vector-icons";
 import { textSize } from "../../constants/textSize";
 import { ICON_SIZE } from "../../constants/sizes";
-import { spaces } from "../../constants/space";
 
 export default function SearchInput({ placeholder, value, onChangeText }) {
   return (

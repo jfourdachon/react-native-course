@@ -1,8 +1,8 @@
 export const colors = {
   WHITE: "#fff",
   LIGHT: "#e9f1fa",
-  DARK: "#1A2530",
-  GREY: "#707B81",
-  BLUE: "#5B9EE1",
-  RED: "#F87265",
+  DARK: "#1a2530",
+  GREY: "#707b81",
+  BLUE: "#5b9ee1",
+  RED: "#f87265",
 };

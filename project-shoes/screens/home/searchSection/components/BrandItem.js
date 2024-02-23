@@ -1,11 +1,11 @@
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
-import { radius } from "../../../../constants/radius";
 import { colors } from "../../../../constants/colors";
-
+import { radius } from "../../../../constants/radius";
+import { spaces } from "../../../../constants/spaces";
 import { ICON_SIZE } from "../../../../constants/sizes";
+import TextBoldM from "../../../../ui-components/texts/TextBoldM";
 import TextBoldL from "../../../../ui-components/texts/TextBoldL";
 import { brands } from "../../../../data/brands";
-import { spaces } from "../../../../constants/space";
 
 export default function BrandItem({
   item,
