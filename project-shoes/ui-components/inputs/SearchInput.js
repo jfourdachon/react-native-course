@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     marginHorizontal: spaces.L,
     borderRadius: radius.FULL,
     height: 50,
+    maxWidth: 360,
   },
   searchIcon: {
     marginHorizontal: spaces.M,

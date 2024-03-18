@@ -5,6 +5,7 @@ import TextBoldM from "../../../../ui-components/texts/TextBoldM";
 import { colors } from "../../../../constants/colors";
 import { radius } from "../../../../constants/radius";
 import { spaces } from "../../../../constants/spaces";
+import { WINDOW_WIDTH } from "../../../../constants/sizes";
 
 export default function HorizontalCard({ item }) {
   return (
@@ -50,8 +51,8 @@ const styles = StyleSheet.create({
     transform: [
       { rotate: "-20deg" },
       { translateX: -spaces.M },
-      { translateY: -spaces.L },
-      { scale: 1.3 },
+      { translateY: WINDOW_WIDTH < 700 ? -spaces.L : -spaces.XL },
+      { scale: WINDOW_WIDTH < 700 ? 1.3 : 1 },
     ],
   },
 });
