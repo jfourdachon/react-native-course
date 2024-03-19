@@ -4,7 +4,7 @@ import { spaces } from "../../constants/spaces";
 import { radius } from "../../constants/radius";
 import { EvilIcons } from "@expo/vector-icons";
 import { textSize } from "../../constants/textSize";
-import { ICON_SIZE } from "../../constants/sizes";
+import { ICON_SIZE, IS_SMALL_SCREEN } from "../../constants/sizes";
 
 export default function SearchInput({ placeholder, value, onChangeText }) {
   return (
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     marginHorizontal: spaces.L,
     borderRadius: radius.FULL,
-    height: 50,
+    height: IS_SMALL_SCREEN ? 44 : 50,
     maxWidth: 360,
   },
   searchIcon: {

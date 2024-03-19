@@ -3,6 +3,7 @@ import Banner from "../components/Banner";
 import { shoes } from "../../../data/shoes";
 import HorizontalCard from "./components/HorizontalCard";
 import { spaces } from "../../../constants/spaces";
+import { IS_LARGE_SCREEN, IS_LARGE_SCREENN } from "../../../constants/sizes";
 
 export default function NewsSection({ selectedBrand }) {
   const item = shoes
@@ -19,7 +20,7 @@ export default function NewsSection({ selectedBrand }) {
 const styles = StyleSheet.create({
   container: {
     flex: 160,
-    minHeight: 160,
+    minHeight: IS_LARGE_SCREENN ? 320 : 160,
     paddingVertical: spaces.M,
   },
 });
