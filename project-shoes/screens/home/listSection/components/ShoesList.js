@@ -29,5 +29,6 @@ export default function ShoesList({ selectedBrand, inputValue }) {
 const styles = StyleSheet.create({
   listContainer: {
     paddingHorizontal: spaces.L,
+    marginVertical: 4,
   },
 });
