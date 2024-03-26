@@ -1,14 +1,10 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function Screen1(props) {
+export default function Screen3({ route }) {
+  const { name } = route.params;
   return (
-    <Pressable
-      style={styles.container}
-      onPress={() => {
-        props.navigation.jumpTo("Settings", { name: "john" });
-      }}
-    >
-      <Text>Screen 1</Text>
+    <Pressable style={styles.container}>
+      <Text>Settings {name}</Text>
     </Pressable>
   );
 }

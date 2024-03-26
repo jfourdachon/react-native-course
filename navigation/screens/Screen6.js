@@ -1,14 +1,11 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function Screen1(props) {
+export default function Screen6() {
+  console.log(" screen 6 ");
+
   return (
-    <Pressable
-      style={styles.container}
-      onPress={() => {
-        props.navigation.jumpTo("Settings", { name: "john" });
-      }}
-    >
-      <Text>Screen 1</Text>
+    <Pressable style={styles.container}>
+      <Text>Article 3</Text>
     </Pressable>
   );
 }
