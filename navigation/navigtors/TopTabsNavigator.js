@@ -10,13 +10,28 @@ export default function TopTabsNavigator() {
   return (
     <Tabs.Navigator
       screenOptions={{
-        tabBarStyle: {
-          paddingTop: inset.top,
+        tabBarAndroidRipple: { borderless: false },
+        tabBarPressColor: "violet",
+        // tabBarStyle: {
+        //   paddingTop: inset.top,
+        // },
+        tabBarIndicatorStyle: {
+          backgroundColor: "violet",
         },
+        tabBarInactiveTintColor: "grey",
+        tabBarActiveTintColor: "blue",
+        swipeEnabled: false,
+        tabBarScrollEnabled: true,
+        lazy: true,
+        lazyPreloadDistance: 1,
       }}
     >
       <Tabs.Screen component={Screen4} name="Article 1" />
-      <Tabs.Screen component={Screen5} name="Article 2" />
+      <Tabs.Screen
+        component={Screen5}
+        name="Article 2"
+        // initialParams={{ name: "Bob" }}
+      />
       <Tabs.Screen component={Screen6} name="Article 3" />
     </Tabs.Navigator>
   );

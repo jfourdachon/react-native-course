@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
 export default function Screen6() {
-  console.log(" screen 6 ");
+  console.log("screen 6");
 
   return (
     <Pressable style={styles.container}>

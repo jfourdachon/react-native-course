@@ -1,8 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Screen1 from "../screens/Screen1";
 import Screen3 from "../screens/Screen3";
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import StackNavigator from "./StackNavigator";
+import TopTabsNavigator from "./TopTabsNavigator";
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabsNavigator() {
@@ -31,12 +32,13 @@ export default function BottomTabsNavigator() {
       }}
     >
       <Tab.Screen
-        component={Screen1}
+        component={StackNavigator}
         name="Home"
         options={{
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={32} color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -46,6 +48,15 @@ export default function BottomTabsNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="settings" size={32} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        component={TopTabsNavigator}
+        name="Articles"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="journal-sharp" size={32} color={color} />
           ),
         }}
       />

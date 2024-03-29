@@ -1,11 +1,9 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function Screen5({ route }) {
-  console.log("screen 5");
-
+export default function Screen7() {
   return (
     <Pressable style={styles.container}>
-      <Text>Article 2 {route.params?.name}</Text>
+      <Text>Notifications</Text>
     </Pressable>
   );
 }
