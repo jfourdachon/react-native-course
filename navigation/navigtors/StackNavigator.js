@@ -18,6 +18,7 @@ export default function StackNavigator() {
         headerTitleStyle: {
           color: "blue",
         },
+        headerShown: false,
       }}
     >
       <Stack.Screen

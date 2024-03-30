@@ -29,6 +29,7 @@ export default function BottomTabsNavigator() {
         },
         tabBarActiveBackgroundColor: "#e6e8f5",
         tabBarShowLabel: false,
+        headerShown: false,
       }}
     >
       <Tab.Screen
@@ -38,7 +39,6 @@ export default function BottomTabsNavigator() {
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={32} color={color} />
           ),
-          headerShown: false,
         }}
       />
       <Tab.Screen

@@ -31,7 +31,7 @@ export default function DrawerNavigator() {
           ),
           swipeEdgeWidth: 100,
           swipeMinDistance: 20,
-          overlayColor: "rgba(0,0,255,05)",
+          overlayColor: "rgba(0,0,255,0.5)",
         })}
       >
         <Drawer.Screen
@@ -42,18 +42,18 @@ export default function DrawerNavigator() {
             drawerIcon: ({ color }) => (
               <AntDesign name="home" size={24} color={color} />
             ),
-            // headerRight: () => (
-            //   <Pressable
-            //     style={{ marginRight: 16 }}
-            //     onPress={() =>
-            //       navigation.navigate("Screen2", {
-            //         name: "john",
-            //       })
-            //     }
-            //   >
-            //     <AntDesign name="user" size={24} color="black" />
-            //   </Pressable>
-            // ),
+            headerRight: () => (
+              <Pressable
+                style={{ marginRight: 16 }}
+                onPress={() =>
+                  navigation.navigate("Screen2", {
+                    name: "john",
+                  })
+                }
+              >
+                <AntDesign name="user" size={24} color="black" />
+              </Pressable>
+            ),
           })}
         />
         <Drawer.Screen
