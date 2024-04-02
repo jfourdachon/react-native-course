@@ -3,12 +3,11 @@ import { spaces } from "../../../constants/spaces";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";
 import TextMediumM from "../../../ui-components/texts/TextMediumM";
 
-export default function Banner({ text }) {
-  const onPress = () => {};
+export default function Banner({ text, navigate }) {
   return (
     <View style={styles.container}>
       <TextBoldL>{text}</TextBoldL>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={navigate}>
         <TextMediumM blue>Voir tout</TextMediumM>
       </TouchableOpacity>
     </View>

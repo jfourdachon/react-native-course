@@ -11,14 +11,13 @@ import ListSection from "./listSection";
 import NewsSection from "./newsSection";
 import { useState } from "react";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [inputValue, setInputValue] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("nike");
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar />
-      <View style={{ width: "100%", backgroundColor: "#000000", height: 60 }} />
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
         bounces={false}
@@ -29,7 +28,11 @@ export default function HomeScreen() {
           selectedBrand={selectedBrand}
           setSelectedBrand={setSelectedBrand}
         />
-        <ListSection selectedBrand={selectedBrand} inputValue={inputValue} />
+        <ListSection
+          selectedBrand={selectedBrand}
+          inputValue={inputValue}
+          navigation={navigation}
+        />
         <NewsSection selectedBrand={selectedBrand} />
       </ScrollView>
       <View
