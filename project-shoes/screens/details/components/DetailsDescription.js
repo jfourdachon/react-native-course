@@ -1,8 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import TextMediumM from "../../../ui-components/texts/TextMediumM";
 import TextBoldXL from "../../../ui-components/texts/TextBoldXL";
-import TextBoldM from "../../../ui-components/texts/TextBoldM";
-import TextMediumS from "../../../ui-components/texts/TextMediumS";
 import { spaces } from "../../../constants/spaces";
 import { colors } from "../../../constants/colors";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";

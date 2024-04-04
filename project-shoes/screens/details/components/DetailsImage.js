@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     resizeMode: "center",
     transform: [
       { rotate: "-20deg" },
-      { translateX: -spaces.S },
+      { translateX: -spaces.M },
       { translateY: -spaces.S },
     ],
   },

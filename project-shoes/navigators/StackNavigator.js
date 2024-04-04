@@ -33,6 +33,7 @@ export default function StackNavigator() {
           headerLeft: null,
         }}
       />
+      <Stack.Screen component={Details} name="Details" />
       <Stack.Screen component={List} name="List" />
       <Stack.Screen
         component={NewsList}
@@ -41,7 +42,6 @@ export default function StackNavigator() {
           title: "Nouveautés",
         }}
       />
-      <Stack.Screen component={Details} name="Details" />
     </Stack.Navigator>
   );
 }
