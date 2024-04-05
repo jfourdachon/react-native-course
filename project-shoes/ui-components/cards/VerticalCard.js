@@ -8,15 +8,12 @@ import TextMediumM from "../texts/TextMediumM";
 import { AntDesign } from "@expo/vector-icons";
 import { IS_LARGE_SCREEN, SCREEN_WIDTH } from "../../constants/sizes";
 import Touchable from "../touchable/Touchable";
-import { useNavigation } from "@react-navigation/native";
 
-export default function VerticalCard({ item, listScreen = false }) {
-  const navigation = useNavigation();
+export default function VerticalCard({ item, listScreen = false, onPress }) {
   const colors = item.items.map((elem) => elem.color);
-  console.log(colors);
   return (
     <View style={styles.container}>
-      <Touchable onPress={() => navigation.navigate("Details")}>
+      <Touchable onPress={onPress}>
         <View style={styles.touchableContainer}>
           <View style={styles.imageContainer}>
             <Image source={item.items[0].image} style={styles.image} />

@@ -6,7 +6,6 @@ import { colors } from "../../../constants/colors";
 import { radius } from "../../../constants/radius";
 
 export default function Sizes({ sizes, selectedSize, setSelectedSize }) {
-  console.log(selectedSize);
   return (
     <View style={styles.container}>
       <TextBoldL style={styles.title}>Tailles</TextBoldL>
