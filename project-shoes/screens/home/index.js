@@ -35,9 +35,6 @@ export default function HomeScreen({ navigation }) {
         />
         <NewsSection selectedBrand={selectedBrand} />
       </ScrollView>
-      <View
-        style={{ width: "100%", backgroundColor: "#000000", height: 106 }}
-      />
     </SafeAreaView>
   );
 }
