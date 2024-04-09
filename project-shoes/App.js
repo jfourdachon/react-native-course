@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabsNavigator from "./navigators/BottomTabsNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -10,8 +11,10 @@ export default function App() {
     SemiBold: require("./assets/fonts/Montserrat-SemiBold.ttf"),
   });
   return fontsLoaded ? (
-    <NavigationContainer>
-      <BottomTabsNavigator />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <BottomTabsNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   ) : null;
 }
