@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import StackNavigator from "./StackNavigator";
+import StackNavigator from "./HomeStackNavigator";
 import Favorites from "../screens/favorites";
 import Cart from "../screens/cart";
 import Notifications from "../screens/notifications";

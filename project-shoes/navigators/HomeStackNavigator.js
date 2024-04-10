@@ -9,7 +9,7 @@ import Details from "../screens/details";
 
 const Stack = createNativeStackNavigator();
 
-export default function StackNavigator() {
+export default function HomeStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={({ navigation }) => ({
@@ -33,7 +33,6 @@ export default function StackNavigator() {
           headerLeft: null,
         }}
       />
-      <Stack.Screen component={Details} name="Details" />
       <Stack.Screen component={List} name="List" />
       <Stack.Screen
         component={NewsList}
