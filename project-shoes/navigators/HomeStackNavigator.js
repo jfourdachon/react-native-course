@@ -30,7 +30,7 @@ export default function HomeStackNavigator() {
         name="Home"
         options={{
           title: "Shoes",
-          headerLeft: null,
+          headerShown: false,
         }}
       />
       <Stack.Screen component={List} name="List" />

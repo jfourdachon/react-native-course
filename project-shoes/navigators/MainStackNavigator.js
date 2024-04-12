@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import Details from "../screens/details";
 import BottomTabsNavigator from "./BottomTabsNavigator";
+import DrawerNavigator from "./DrawerNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,8 +20,8 @@ export default function MainStackNavigator() {
       })}
     >
       <Stack.Screen
-        component={BottomTabsNavigator}
-        name="BottomTabs"
+        component={DrawerNavigator}
+        name="Drawer"
         options={{
           headerShown: false,
         }}

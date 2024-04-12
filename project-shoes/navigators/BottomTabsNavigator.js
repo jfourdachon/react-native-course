@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import StackNavigator from "./HomeStackNavigator";
 import Favorites from "../screens/favorites";
 import Cart from "../screens/cart";
 import Notifications from "../screens/notifications";
@@ -20,6 +19,7 @@ import { Platform, StyleSheet, View } from "react-native";
 import { radius } from "../constants/radius";
 import BottomTabsBackground from "../assets/images/navigation/bottomTabsBackground.svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import HomeStackNavigator from "./HomeStackNavigator";
 
 const Tabs = createBottomTabNavigator();
 
@@ -31,7 +31,7 @@ export default function BottomTabsNavigator() {
   const insets = useSafeAreaInsets();
   return (
     <Tabs.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
         tabBarStyle: {
           height: originalHeight + insets.bottom / 2,
           backgroundColor: colors.LIGHT,
@@ -39,6 +39,10 @@ export default function BottomTabsNavigator() {
           borderTopWidth: 0,
           elevation: 0,
         },
+        headerStyle: {
+          backgroundColor: colors.LIGHT,
+        },
+        headerShadowVisible: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.BLUE,
         tabBarInactiveTintColor: colors.GREY,
@@ -51,13 +55,14 @@ export default function BottomTabsNavigator() {
             />
           </View>
         ),
-      }}
+        headerTitleAlign: "center",
+      })}
     >
       <Tabs.Screen
-        component={StackNavigator}
+        component={HomeStackNavigator}
         name="HomeStack"
         options={{
-          headerShown: false,
+          title: "Shoes",
           tabBarIcon: ({ color, focused }) => (
             <HomeIcon
               width={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
@@ -71,6 +76,7 @@ export default function BottomTabsNavigator() {
         component={Favorites}
         name="Favorites"
         options={{
+          title: "Favoris",
           tabBarIcon: ({ color, focused }) => (
             <FavoriteIcon
               width={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
@@ -84,6 +90,7 @@ export default function BottomTabsNavigator() {
         component={Cart}
         name="Cart"
         options={{
+          title: "Panier",
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[
@@ -117,6 +124,7 @@ export default function BottomTabsNavigator() {
         component={Profile}
         name="Profile"
         options={{
+          title: "Profil",
           tabBarIcon: ({ color, focused }) => (
             <ProfileIcon
               width={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
