@@ -19,8 +19,9 @@ export default function DrawerNavigator() {
       <Drawer.Group
         screenOptions={({ navigation }) => ({
           headerTitleAlign: "center",
-          drawerActiveTintColor: "blue",
+          drawerActiveTintColor: "white",
           drawerInactiveTintColor: "grey",
+
           headerLeft: () => (
             <Pressable
               style={{ marginLeft: 16 }}

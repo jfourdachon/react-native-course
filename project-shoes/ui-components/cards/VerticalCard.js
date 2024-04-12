@@ -1,32 +1,54 @@
 import { View, StyleSheet, Image, Platform } from "react-native";
-import { colors } from "../../../../constants/colors";
-import { radius } from "../../../../constants/radius";
-import { spaces } from "../../../../constants/spaces";
-import TextMediumS from "../../../../ui-components/texts/TextMediumS";
-import TextBoldL from "../../../../ui-components/texts/TextBoldL";
-import TextMediumM from "../../../../ui-components/texts/TextMediumM";
+import { colors } from "../../constants/colors";
+import { radius } from "../../constants/radius";
+import { spaces } from "../../constants/spaces";
+import TextMediumS from "../texts/TextMediumS";
+import TextBoldL from "../texts/TextBoldL";
+import TextMediumM from "../texts/TextMediumM";
 import { AntDesign } from "@expo/vector-icons";
-import { IS_LARGE_SCREEN, SCREEN_WIDTH } from "../../../../constants/sizes";
-import Touchable from "../../../../ui-components/touchable/Touchable";
+import { IS_LARGE_SCREEN, SCREEN_WIDTH } from "../../constants/sizes";
+import Touchable from "../touchable/Touchable";
 
-export default function VerticalCard({ item }) {
+export default function VerticalCard({ item, listScreen = false, onPress }) {
+  const colors = item.items.map((elem) => elem.color);
   return (
     <View style={styles.container}>
-      <Touchable>
+      <Touchable onPress={onPress}>
         <View style={styles.touchableContainer}>
           <View style={styles.imageContainer}>
             <Image source={item.items[0].image} style={styles.image} />
           </View>
-          <View style={styles.descriptionContainer}>
+          <View
+            style={[
+              styles.descriptionContainer,
+              { flex: listScreen ? 1 : IS_LARGE_SCREEN ? 0.7 : 0.2 },
+            ]}
+          >
             <View>
               <TextMediumS blue>TOP VENTE</TextMediumS>
               <TextBoldL style={styles.itemName}>{item.name}</TextBoldL>
             </View>
-            <TextMediumM>{item.price} €</TextMediumM>
+            {listScreen ? (
+              <View style={styles.bottomDescriptionContainer}>
+                <TextMediumM>{item.price} €</TextMediumM>
+                <View style={styles.colorsContainer}>
+                  {colors.map((color) => (
+                    <View
+                      key={color}
+                      style={[styles.colorItem, { backgroundColor: color }]}
+                    />
+                  ))}
+                </View>
+              </View>
+            ) : (
+              <TextMediumM>{item.price} €</TextMediumM>
+            )}
           </View>
-          <View style={styles.btn}>
-            <AntDesign name="plus" size={24} color={colors.WHITE} />
-          </View>
+          {listScreen ? null : (
+            <View style={styles.btn}>
+              <AntDesign name="plus" size={24} color={colors.WHITE} />
+            </View>
+          )}
         </View>
       </Touchable>
     </View>
@@ -70,12 +92,25 @@ const styles = StyleSheet.create({
     ],
   },
   descriptionContainer: {
-    flex: IS_LARGE_SCREEN ? 0.7 : 0.2,
     justifyContent: "space-between",
     padding: spaces.S,
   },
   itemName: {
     marginTop: spaces.S,
+  },
+  bottomDescriptionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  colorsContainer: {
+    flexDirection: "row",
+  },
+  colorItem: {
+    width: spaces.M,
+    height: spaces.M,
+    borderRadius: radius.FULL,
+    marginHorizontal: spaces.XS,
   },
   btn: {
     position: "absolute",

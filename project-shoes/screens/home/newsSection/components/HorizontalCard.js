@@ -8,7 +8,7 @@ import { spaces } from "../../../../constants/spaces";
 import { IS_LARGE_SCREEN } from "../../../../constants/sizes";
 import Touchable from "../../../../ui-components/touchable/Touchable";
 
-export default function HorizontalCard({ item }) {
+export default function HorizontalCard({ item, onPress }) {
   const { height } = useWindowDimensions();
   const landscapeImageStyle = {
     width: "95%",
@@ -23,7 +23,7 @@ export default function HorizontalCard({ item }) {
 
   return (
     <View style={styles.container}>
-      <Touchable styles={styles.touchableContainer}>
+      <Touchable styles={styles.touchableContainer} onPress={onPress}>
         <View style={styles.touchableContainer}>
           <View style={styles.descriptionContainer}>
             <View>

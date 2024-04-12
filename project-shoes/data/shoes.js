@@ -226,7 +226,7 @@ export const shoes = [
       {
         id: "adi97p",
         name: "Galaxy 6",
-        gemder: "u",
+        gender: "u",
         items: [
           {
             color: "black",
@@ -252,7 +252,7 @@ export const shoes = [
       {
         id: "adi93p",
         name: "Gazelles",
-        gemder: "m",
+        gender: "m",
         items: [
           {
             color: "black",
@@ -277,7 +277,7 @@ export const shoes = [
       {
         id: "adi203p",
         name: "SL 72",
-        gemder: "u",
+        gender: "u",
         items: [
           {
             color: "blue",

@@ -1,5 +1,8 @@
+import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-import HomeScreen from "./screens/home";
+import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import MainStackNavigator from "./navigators/MainStackNavigator";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -8,5 +11,11 @@ export default function App() {
     Medium: require("./assets/fonts/Montserrat-Medium.ttf"),
     SemiBold: require("./assets/fonts/Montserrat-SemiBold.ttf"),
   });
-  return fontsLoaded ? <HomeScreen /> : null;
+  return fontsLoaded ? (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <MainStackNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
+  ) : null;
 }
