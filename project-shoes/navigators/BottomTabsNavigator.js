@@ -15,11 +15,13 @@ import {
   SCREEN_WIDTH,
   SMALL_ICON_SIZE,
 } from "../constants/sizes";
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { radius } from "../constants/radius";
 import BottomTabsBackground from "../assets/images/navigation/bottomTabsBackground.svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeStackNavigator from "./HomeStackNavigator";
+import DrawerIcon from "../assets/images/navigation/drawer.svg";
+import { spaces } from "../constants/spaces";
 
 const Tabs = createBottomTabNavigator();
 
@@ -32,6 +34,7 @@ export default function BottomTabsNavigator() {
   return (
     <Tabs.Navigator
       screenOptions={({ navigation }) => ({
+        unmountOnBlur: true,
         tabBarStyle: {
           height: originalHeight + insets.bottom / 2,
           backgroundColor: colors.LIGHT,
@@ -56,13 +59,21 @@ export default function BottomTabsNavigator() {
           </View>
         ),
         headerTitleAlign: "center",
+        headerLeft: () => (
+          <Pressable
+            style={styles.drawerIconContainer}
+            onPress={() => navigation.getParent().openDrawer()}
+          >
+            <DrawerIcon />
+          </Pressable>
+        ),
       })}
     >
       <Tabs.Screen
         component={HomeStackNavigator}
         name="HomeStack"
         options={{
-          title: "Shoes",
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <HomeIcon
               width={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
@@ -139,6 +150,9 @@ export default function BottomTabsNavigator() {
 }
 
 const styles = StyleSheet.create({
+  drawerIconContainer: {
+    marginLeft: spaces.L,
+  },
   cartContainer: {
     width: 60,
     height: 60,

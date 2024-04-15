@@ -22,7 +22,7 @@ const Drawer = createDrawerNavigator();
 
 const routes = [
   { name: "HomeStack", label: "Accueil", icon: HomeIcon, index: 0 },
-
+  { name: "Favorites", label: "Favoris", icon: FavoriteIcon, index: 1 },
   { name: "Cart", label: "Panier", icon: CartIcon, index: 2 },
   {
     name: "Notifications",
@@ -31,7 +31,6 @@ const routes = [
     index: 3,
   },
   { name: "Profile", label: "Profil", icon: ProfileIcon, index: 4 },
-  { name: "Favorites", label: "Favoris", icon: FavoriteIcon, index: 1 },
 ];
 
 export default function DrawerNavigator() {
@@ -52,7 +51,7 @@ export default function DrawerNavigator() {
 }
 
 function CustomDrawerContent(props) {
-  const activeIndex = props.state.routes[0].state.index;
+  const activeIndex = props.state.routes[0].state?.index || 0;
   return (
     <DrawerContentScrollView>
       <View style={styles.userInfosContainer}>
