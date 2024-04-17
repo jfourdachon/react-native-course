@@ -21,7 +21,7 @@ export default function BrandsList({ selectedBrand, setSelectedBrand }) {
         />
       )}
       style={styles.listContainer}
-      ItemSeparatorComponent={<ItemSeparator width={spaces.S} />}
+      ItemSeparatorComponent={<ItemSeparator width={spaces.M} />}
     />
   );
 }
