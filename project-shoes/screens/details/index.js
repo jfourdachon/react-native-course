@@ -7,7 +7,6 @@ import Sizes from "./components/Sizes";
 import CustomButton from "../../ui-components/buttons/CustomButton";
 import { spaces } from "../../constants/spaces";
 import { useEffect, useState } from "react";
-import { colors } from "../../constants/colors";
 
 export default function Details({ route, navigation }) {
   const data = shoes
