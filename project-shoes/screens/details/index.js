@@ -37,6 +37,7 @@ export default function Details({ route, navigation }) {
           name={data.name}
           price={data.price}
           description={data.description}
+          id={route.params.id}
         />
         <Gallery
           images={images}
