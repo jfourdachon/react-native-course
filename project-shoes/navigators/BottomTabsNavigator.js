@@ -22,6 +22,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeStackNavigator from "./HomeStackNavigator";
 import DrawerIcon from "../assets/images/navigation/drawer.svg";
 import { spaces } from "../constants/spaces";
+import { useDispatch, useSelector } from "react-redux";
+import { showCartScreen } from "../store/slices/screensSlice";
 
 const Tabs = createBottomTabNavigator();
 
@@ -30,6 +32,9 @@ const originalHeight = IS_LARGE_SCREEN ? 212 : 106;
 const aspectRatio = originalWidth / originalHeight;
 
 export default function BottomTabsNavigator() {
+  const dispatch = useDispatch();
+  const badgeCount = useSelector((state) => state.cart.shoes.length);
+
   const insets = useSafeAreaInsets();
   return (
     <Tabs.Navigator
@@ -100,23 +105,34 @@ export default function BottomTabsNavigator() {
       <Tabs.Screen
         component={Cart}
         name="Cart"
-        options={{
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            dispatch(showCartScreen());
+          },
+        }}
+        options={({ navigation }) => ({
           title: "Panier",
+          tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: colors.LIGHT,
+          },
           tabBarIcon: ({ color, focused }) => (
-            <View
+            <Pressable
               style={[
                 styles.cartContainer,
-                focused ? styles.activeCart : styles.inactiveCart,
+                badgeCount ? styles.activeCart : styles.inactiveCart,
               ]}
+              onPress={() => dispatch(showCartScreen())}
             >
               <CartIcon
-                width={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
-                height={focused ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
-                color={focused ? colors.WHITE : color}
+                width={badgeCount > 0 ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
+                height={badgeCount > 0 ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
+                color={badgeCount > 0 ? colors.WHITE : color}
               />
-            </View>
+            </Pressable>
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         component={Notifications}

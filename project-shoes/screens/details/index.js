@@ -7,8 +7,11 @@ import Sizes from "./components/Sizes";
 import CustomButton from "../../ui-components/buttons/CustomButton";
 import { spaces } from "../../constants/spaces";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addShoesToCart } from "../../store/slices/cartSlice";
 
 export default function Details({ route, navigation }) {
+  const dispatch = useDispatch();
   const data = shoes
     .find((el) => el.stock.find((item) => item.id === route.params.id))
     .stock.find((item) => item.id === route.params.id);
@@ -17,10 +20,15 @@ export default function Details({ route, navigation }) {
   const [selectedImage, setSelectedImage] = useState(data.items[0].image);
   const [selectedSize, setSelectedSize] = useState();
   const [sizes, setSizes] = useState(data.items[0].sizes);
+  const brand = shoes.find((el) =>
+    el.stock.find((item) => item.id === route.params.id)
+  ).brand;
 
   useEffect(() => {
     setSizes(data.items.find((el) => el.image === selectedImage).sizes);
-    setSelectedSize();
+    setSelectedSize(
+      data.items.find((el) => el.image === selectedImage).sizes[0]
+    );
   }, [selectedImage]);
 
   useEffect(() => {
@@ -28,6 +36,18 @@ export default function Details({ route, navigation }) {
       title: data.gender === "m" ? "Shoes Homme" : "Shoes Femme",
     });
   }, [route.params.id]);
+
+  const addToCart = () =>
+    dispatch(
+      addShoesToCart({
+        id: data.id,
+        name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
+        image: selectedImage,
+        size: selectedSize,
+        price: data.price,
+        quantity: 1,
+      })
+    );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -50,10 +70,7 @@ export default function Details({ route, navigation }) {
           setSelectedSize={setSelectedSize}
         />
         <View style={styles.btnContainer}>
-          <CustomButton
-            text="Ajouter au panier"
-            onPress={() => console.log("ajouter au panier")}
-          />
+          <CustomButton text="Ajouter au panier" onPress={addToCart} />
         </View>
         <View style={styles.fixView} />
       </View>

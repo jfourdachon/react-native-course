@@ -9,6 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStackNavigator from "./navigators/MainStackNavigator";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import CartModal from "./screens/cart/components/CartModal";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,6 +24,7 @@ export default function App() {
         <NavigationContainer>
           <MainStackNavigator />
         </NavigationContainer>
+        <CartModal />
       </SafeAreaProvider>
     </Provider>
   ) : null;
