@@ -22,8 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeStackNavigator from "./HomeStackNavigator";
 import DrawerIcon from "../assets/images/navigation/drawer.svg";
 import { spaces } from "../constants/spaces";
-import { useDispatch, useSelector } from "react-redux";
-import { showCartScreen } from "../store/slices/screensSlice";
+import { useSelector } from "react-redux";
 
 const Tabs = createBottomTabNavigator();
 
@@ -32,9 +31,7 @@ const originalHeight = IS_LARGE_SCREEN ? 212 : 106;
 const aspectRatio = originalWidth / originalHeight;
 
 export default function BottomTabsNavigator() {
-  const dispatch = useDispatch();
   const badgeCount = useSelector((state) => state.cart.shoes.length);
-
   const insets = useSafeAreaInsets();
   return (
     <Tabs.Navigator
@@ -105,30 +102,24 @@ export default function BottomTabsNavigator() {
       <Tabs.Screen
         component={Cart}
         name="Cart"
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            dispatch(showCartScreen());
-          },
-        }}
         options={({ navigation }) => ({
-          title: "Panier",
-          tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
+          tabBarBadge: badgeCount ? badgeCount : undefined,
           tabBarBadgeStyle: {
             backgroundColor: colors.LIGHT,
+            color: colors.BLUE,
           },
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <Pressable
               style={[
                 styles.cartContainer,
                 badgeCount ? styles.activeCart : styles.inactiveCart,
               ]}
-              onPress={() => dispatch(showCartScreen())}
+              onPress={() => navigation.navigate("MainCart")}
             >
               <CartIcon
-                width={badgeCount > 0 ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
-                height={badgeCount > 0 ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
-                color={badgeCount > 0 ? colors.WHITE : color}
+                width={badgeCount ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
+                height={badgeCount ? FOCUSED_ICON_SIZE : SMALL_ICON_SIZE}
+                color={badgeCount ? colors.WHITE : color}
               />
             </Pressable>
           ),

@@ -17,6 +17,7 @@ export default function DetailsDescription({ name, price, description, id }) {
   const favoritesShoesIds = useSelector(
     (state) => state.favorites.favoritesShoesIds
   );
+
   const isFavorite = favoritesShoesIds.includes(id);
   const iconName = isFavorite ? "star" : "staro";
 

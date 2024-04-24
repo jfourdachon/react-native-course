@@ -1,4 +1,4 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import DetailsImage from "./components/DetailsImage";
 import { shoes } from "../../data/shoes";
 import DetailsDescription from "./components/DetailsDescription";
@@ -12,17 +12,32 @@ import { addShoesToCart } from "../../store/slices/cartSlice";
 
 export default function Details({ route, navigation }) {
   const dispatch = useDispatch();
+
   const data = shoes
     .find((el) => el.stock.find((item) => item.id === route.params.id))
     .stock.find((item) => item.id === route.params.id);
+
+  const brand = shoes.find((el) =>
+    el.stock.find((item) => item.id === route.params.id)
+  ).brand;
 
   const images = data.items.map((item) => item.image);
   const [selectedImage, setSelectedImage] = useState(data.items[0].image);
   const [selectedSize, setSelectedSize] = useState();
   const [sizes, setSizes] = useState(data.items[0].sizes);
-  const brand = shoes.find((el) =>
-    el.stock.find((item) => item.id === route.params.id)
-  ).brand;
+
+  const addToCart = () => {
+    dispatch(
+      addShoesToCart({
+        id: data.id + Date.now(),
+        name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
+        image: selectedImage,
+        size: selectedSize,
+        price: data.price,
+        quantity: 1,
+      })
+    );
+  };
 
   useEffect(() => {
     setSizes(data.items.find((el) => el.image === selectedImage).sizes);
@@ -36,18 +51,6 @@ export default function Details({ route, navigation }) {
       title: data.gender === "m" ? "Shoes Homme" : "Shoes Femme",
     });
   }, [route.params.id]);
-
-  const addToCart = () =>
-    dispatch(
-      addShoesToCart({
-        id: data.id,
-        name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
-        image: selectedImage,
-        size: selectedSize,
-        price: data.price,
-        quantity: 1,
-      })
-    );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

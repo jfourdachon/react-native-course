@@ -1,57 +1,39 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import ListItem from "./components/ListItem";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+import ItemSeparator from "../../ui-components/separators/ListItemSeparator";
 import { spaces } from "../../constants/spaces";
 import { colors } from "../../constants/colors";
-import { radius } from "../../constants/radius";
-import TextBoldXL from "../../ui-components/texts/TextBoldXL";
-import CustomButton from "../../ui-components/buttons/CustomButton";
-import { useHeaderHeight } from "@react-navigation/elements";
-import { hideCartScreen } from "../../store/slices/screensSlice";
-import { Ionicons } from "@expo/vector-icons";
+import ListItem from "./components/ListItem";
 import TextBoldL from "../../ui-components/texts/TextBoldL";
-import ItemSeparator from "../../ui-components/separators/ListItemSeparator";
+import TextBoldXL from "../../ui-components/texts/TextBoldXL";
+import { radius } from "../../constants/radius";
+import CustomButton from "../../ui-components/buttons/CustomButton";
+import { IS_LARGE_SCREEN } from "../../constants/sizes";
 
 export default function Cart() {
   const state = useSelector((state) => state.cart);
-  const shoes = state.shoes;
-  const totalAmount = state.totalAmount;
-  const dispatch = useDispatch();
-  const hideScreen = () => dispatch(hideCartScreen());
+  const { shoes, totalAmount } = state;
+
+  if (shoes.length === 0) {
+    return (
+      <View style={styles.listEmptyContainer}>
+        <TextBoldL>Votre panier est vide</TextBoldL>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          height: 60,
-          paddingLeft: spaces.L,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <Pressable onPress={hideScreen} style={[styles.iconContainer]}>
-            <Ionicons name="chevron-back" size={24} color={colors.DARK} />
-          </Pressable>
-        </View>
-        <View style={{ flex: 1 }}>
-          <TextBoldL>Mon panier</TextBoldL>
-        </View>
-        <View style={{ flex: 1 }} />
-      </View>
       <FlatList
         data={shoes}
+        showsVerticalScrollIndicator={false}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => <ListItem item={item} />}
         style={styles.listContainer}
         ItemSeparatorComponent={<ItemSeparator height={spaces.L} />}
-        ListEmptyComponent={
-          <View style={styles.listEmptyContainer}>
-            <TextBoldL>Votre panier est vide</TextBoldL>
-          </View>
-        }
+        numColumns={IS_LARGE_SCREEN ? 2 : 1}
       />
-      <View style={styles.bottomContainer}>
+      <View style={styles.priceContainer}>
         <View style={styles.rowContainer}>
           <TextBoldXL>Sous total</TextBoldXL>
           <TextBoldXL>{totalAmount} €</TextBoldXL>
@@ -60,58 +42,50 @@ export default function Cart() {
           <TextBoldXL>Frais de port</TextBoldXL>
           <TextBoldXL>{Math.floor(totalAmount / 15)} €</TextBoldXL>
         </View>
-        <View style={styles.dashedLine}></View>
+
+        <View style={styles.dashedLine} />
         <View style={styles.rowContainer}>
           <TextBoldXL>Total</TextBoldXL>
           <TextBoldXL>
             {totalAmount + Math.floor(totalAmount / 15)} €
           </TextBoldXL>
         </View>
-        <CustomButton text={"Passer la commande"} />
+        <CustomButton text="Passer la commande" />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  listEmptyContainer: {
+    flex: 1,
+    backgroundColor: colors.LIGHT,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: colors.LIGHT,
   },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.FULL,
-    backgroundColor: colors.WHITE,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   listContainer: {
     marginTop: spaces.M,
-    // flex: 0.6,
   },
-  bottomContainer: {
-    // flex: 0.4,
+  priceContainer: {
     backgroundColor: colors.WHITE,
     borderTopLeftRadius: radius.REGULAR,
     borderTopRightRadius: radius.REGULAR,
-    padding: spaces.L,
+    padding: spaces.XL,
   },
   rowContainer: {
     flexDirection: "row",
-    alignIteyms: "center",
+    alignItems: "center",
     justifyContent: "space-between",
     marginBottom: spaces.M,
   },
   dashedLine: {
-    borderStyle: "dashed",
     borderWidth: 1,
     borderColor: colors.GREY,
+    borderStyle: "dashed",
     marginBottom: spaces.M,
-  },
-  listEmptyContainer: {
-    height: 560,
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

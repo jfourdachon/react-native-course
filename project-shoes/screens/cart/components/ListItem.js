@@ -1,46 +1,37 @@
-import { StyleSheet, Image, View, Pressable } from "react-native";
-import Touchable from "../../../ui-components/touchable/Touchable";
-import TextBoldM from "../../../ui-components/texts/TextBoldM";
-import TextMediumM from "../../../ui-components/texts/TextMediumM";
+import { View, StyleSheet, Image, Pressable, Platform } from "react-native";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";
-import TextMediumS from "../../../ui-components/texts/TextMediumS";
-import { spaces } from "../../../constants/spaces";
-import { colors } from "../../../constants/colors";
-import { radius } from "../../../constants/radius";
+import TextBoldXL from "../../../ui-components/texts/TextBoldXL";
+import TextBoldM from "../../../ui-components/texts/TextBoldM";
 import { Feather } from "@expo/vector-icons";
 import { ICON_SIZE } from "../../../constants/sizes";
-import { textSize } from "../../../constants/textSize";
-import TextBoldXL from "../../../ui-components/texts/TextBoldXL";
+import { colors } from "../../../constants/colors";
+import { spaces } from "../../../constants/spaces";
+import { radius } from "../../../constants/radius";
 import { useDispatch } from "react-redux";
 import {
   deacreaseQuantity,
   increaseQuantity,
   removeShoesFromCart,
 } from "../../../store/slices/cartSlice";
-import { useState } from "react";
 
-const ListItem = ({ item }) => {
+export default function ListItem({ item }) {
   const dispatch = useDispatch();
-  const [iconColor, setIconColor] = useState(colors.GREY);
-  const increaseShoesQuantity = () => {
-    dispatch(increaseQuantity({ id: item.id }));
-  };
 
-  const decreaseShoesQuantity = () => {
+  const decreaseShoesQuantity = () =>
     dispatch(deacreaseQuantity({ id: item.id }));
-  };
 
-  const removeShoes = () => {
-    setIconColor(colors.RED);
-    dispatch(removeShoesFromCart({ id: item.id }));
-  };
+  const increaseShoesQuantity = () =>
+    dispatch(increaseQuantity({ id: item.id }));
+
+  const removeShoes = () => dispatch(removeShoesFromCart({ id: item.id }));
+
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
         <View style={styles.imageContainer}>
           <Image source={item.image} style={styles.image} />
         </View>
-        <View style={[styles.textContainer, styles.centerContainer]}>
+        <View style={styles.columnContainer}>
           <TextBoldL>{item.name}</TextBoldL>
           <TextBoldL>{item.price} €</TextBoldL>
           <View style={styles.quantityContainer}>
@@ -51,41 +42,38 @@ const ListItem = ({ item }) => {
               ]}
               onPress={decreaseShoesQuantity}
             >
-              <TextBoldXL>-</TextBoldXL>
+              <TextBoldXL style={styles.minusText}>-</TextBoldXL>
             </Pressable>
             <TextBoldM style={styles.quantityText}>{item.quantity}</TextBoldM>
             <Pressable
               style={[styles.operationSignContainer, styles.addSignContainer]}
               onPress={increaseShoesQuantity}
             >
-              <TextBoldXL style={styles.addSignText}>+</TextBoldXL>
+              <TextBoldXL style={styles.plusText}>+</TextBoldXL>
             </Pressable>
           </View>
         </View>
       </View>
-      <View style={[styles.textContainer, styles.rightContainer]}>
+
+      <View style={[styles.rightContainer, styles.columnContainer]}>
         <TextBoldL>{item.size}</TextBoldL>
         <Feather
           name="trash-2"
           size={ICON_SIZE}
-          color={iconColor}
+          color={colors.GREY}
           suppressHighlighting={true}
           onPress={removeShoes}
         />
       </View>
     </View>
   );
-};
-
-export default ListItem;
+}
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "row",
     width: "100%",
     height: 140,
-    borderWidth: 1,
-    borderColor: "transparent",
-    flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: spaces.XS,
     paddingHorizontal: spaces.L,
@@ -109,12 +97,9 @@ const styles = StyleSheet.create({
       { translateY: -spaces.S },
     ],
   },
-  textContainer: {
+  columnContainer: {
     justifyContent: "space-between",
     paddingVertical: spaces.M,
-  },
-  centerContainer: {
-    // maxWidth: "50%",
   },
   quantityContainer: {
     flexDirection: "row",
@@ -124,16 +109,21 @@ const styles = StyleSheet.create({
     width: spaces.XL,
     height: spaces.XL,
     borderRadius: radius.FULL,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
   substractSignContainer: {
     backgroundColor: colors.WHITE,
   },
+  minusText: {
+    flex: Platform.select({ android: 1 }),
+  },
   addSignContainer: {
     backgroundColor: colors.BLUE,
   },
-  addSignText: { color: colors.WHITE },
+  plusText: {
+    color: colors.WHITE,
+  },
   quantityText: {
     marginHorizontal: spaces.M,
   },
