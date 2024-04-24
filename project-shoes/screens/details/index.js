@@ -1,4 +1,4 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import DetailsImage from "./components/DetailsImage";
 import { shoes } from "../../data/shoes";
 import DetailsDescription from "./components/DetailsDescription";
@@ -7,20 +7,43 @@ import Sizes from "./components/Sizes";
 import CustomButton from "../../ui-components/buttons/CustomButton";
 import { spaces } from "../../constants/spaces";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addShoesToCart } from "../../store/slices/cartSlice";
 
 export default function Details({ route, navigation }) {
+  const dispatch = useDispatch();
+
   const data = shoes
     .find((el) => el.stock.find((item) => item.id === route.params.id))
     .stock.find((item) => item.id === route.params.id);
+
+  const brand = shoes.find((el) =>
+    el.stock.find((item) => item.id === route.params.id)
+  ).brand;
 
   const images = data.items.map((item) => item.image);
   const [selectedImage, setSelectedImage] = useState(data.items[0].image);
   const [selectedSize, setSelectedSize] = useState();
   const [sizes, setSizes] = useState(data.items[0].sizes);
 
+  const addToCart = () => {
+    dispatch(
+      addShoesToCart({
+        id: data.id + Date.now(),
+        name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
+        image: selectedImage,
+        size: selectedSize,
+        price: data.price,
+        quantity: 1,
+      })
+    );
+  };
+
   useEffect(() => {
     setSizes(data.items.find((el) => el.image === selectedImage).sizes);
-    setSelectedSize();
+    setSelectedSize(
+      data.items.find((el) => el.image === selectedImage).sizes[0]
+    );
   }, [selectedImage]);
 
   useEffect(() => {
@@ -37,6 +60,7 @@ export default function Details({ route, navigation }) {
           name={data.name}
           price={data.price}
           description={data.description}
+          id={route.params.id}
         />
         <Gallery
           images={images}
@@ -49,10 +73,7 @@ export default function Details({ route, navigation }) {
           setSelectedSize={setSelectedSize}
         />
         <View style={styles.btnContainer}>
-          <CustomButton
-            text="Ajouter au panier"
-            onPress={() => console.log("ajouter au panier")}
-          />
+          <CustomButton text="Ajouter au panier" onPress={addToCart} />
         </View>
         <View style={styles.fixView} />
       </View>

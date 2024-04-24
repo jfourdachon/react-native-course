@@ -7,10 +7,27 @@ import TextMediumS from "../../../ui-components/texts/TextMediumS";
 import { spaces } from "../../../constants/spaces";
 import { colors } from "../../../constants/colors";
 import { radius } from "../../../constants/radius";
+import { useDispatch, useSelector } from "react-redux";
+import { addSeenNotification } from "../../../store/slices/notificationsSlice";
+
 export default function ListItem({ item, navigateToDetails }) {
+  const dispatch = useDispatch();
+  const seenNotificationsIds = useSelector(
+    (state) => state.notifications.seenNotificationsIds
+  );
+
+  const isSeen = seenNotificationsIds.includes(item.id);
+
+  const navigate = () => {
+    navigateToDetails(item.id);
+    setTimeout(() => {
+      dispatch(addSeenNotification(item.id));
+    }, 300);
+  };
+
   return (
     <View style={styles.container}>
-      <Touchable color={colors.BLUE} onPress={() => navigateToDetails(item.id)}>
+      <Touchable color={colors.BLUE} onPress={navigate}>
         <View style={styles.itemContainer}>
           <View style={styles.imageContainer}>
             <Image source={item.items[0].image} style={styles.image} />
@@ -23,7 +40,11 @@ export default function ListItem({ item, navigateToDetails }) {
           </View>
           <View>
             <TextMediumS>Il y a 2 jours</TextMediumS>
-            <View style={styles.dot} />
+            {isSeen ? (
+              <TextMediumS style={styles.seenText}>vu</TextMediumS>
+            ) : (
+              <View style={styles.dot} />
+            )}
           </View>
         </View>
       </Touchable>
@@ -66,6 +87,10 @@ const styles = StyleSheet.create({
     height: spaces.S,
     borderRadius: radius.FULL,
     backgroundColor: colors.BLUE,
+    marginTop: spaces.M,
+    alignSelf: "flex-end",
+  },
+  seenText: {
     marginTop: spaces.M,
     alignSelf: "flex-end",
   },
