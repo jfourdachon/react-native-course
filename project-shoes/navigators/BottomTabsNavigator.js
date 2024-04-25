@@ -23,6 +23,7 @@ import HomeStackNavigator from "./HomeStackNavigator";
 import DrawerIcon from "../assets/images/navigation/drawer.svg";
 import { spaces } from "../constants/spaces";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -33,6 +34,7 @@ const aspectRatio = originalWidth / originalHeight;
 export default function BottomTabsNavigator() {
   const badgeCount = useSelector((state) => state.cart.shoes.length);
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   return (
     <Tabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -102,6 +104,12 @@ export default function BottomTabsNavigator() {
       <Tabs.Screen
         component={Cart}
         name="Cart"
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("MainCart");
+          },
+        }}
         options={({ navigation }) => ({
           tabBarBadge: badgeCount ? badgeCount : undefined,
           tabBarBadgeStyle: {
