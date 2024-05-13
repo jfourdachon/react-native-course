@@ -1,10 +1,13 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { colors } from "../../constants/colors";
 
-export default function Input({ label, ...inputProps }) {
+export default function Input({ label, error, ...inputProps }) {
   const inputStyles = [styles.input];
   if (inputProps?.multiline) {
     inputStyles.push(styles.multilineInput);
+  }
+  if (error) {
+    inputStyles.push(styles.inputError);
   }
   return (
     <View style={styles.inputContainer}>
@@ -34,5 +37,9 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: "top",
     paddingTop: 6,
+  },
+  inputError: {
+    borderColor: "red",
+    borderWidth: 3,
   },
 });

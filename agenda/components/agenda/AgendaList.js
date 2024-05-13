@@ -5,6 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../constants/colors";
 import Form from "../modal/Form";
 import { useState } from "react";
+import FormWithFormik from "../modal/FormWithFormik";
 
 const Header = ({ openForm }) => (
   <View style={styles.headerContainer}>
@@ -24,24 +25,40 @@ export default function AgendaList() {
   const agendaItems = useSelector((state) => state.agenda.events);
 
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const closeFormHandler = () => setIsFormVisible(false);
+  const [selectedEvent, setSelectedEvent] = useState();
   const openFormHandler = () => setIsFormVisible(true);
+  const closeFormHandler = () => {
+    setIsFormVisible(false);
+    setSelectedEvent();
+  };
+
+  const selectEvent = (id) => {
+    setSelectedEvent(id);
+    setIsFormVisible(true);
+  };
 
   return (
     <>
       <FlatList
-        data={agendaItems}
+        data={[...agendaItems].sort(
+          (a, b) => new Date(a.startDate) - new Date(b.startDate)
+        )}
         keyExtractor={({ id }) => id}
         ItemSeparatorComponent={<View style={{ height: 24 }} />}
         style={styles.listContainer}
-        renderItem={({ item }) => <ListItem item={item} />}
+        renderItem={({ item }) => (
+          <ListItem item={item} selectItem={selectEvent} />
+        )}
         ListHeaderComponent={<Header openForm={openFormHandler} />}
       />
-      <Form isFormVisible={isFormVisible} closeForm={closeFormHandler} />
+      <FormWithFormik
+        isFormVisible={isFormVisible}
+        closeForm={closeFormHandler}
+        selectedEvent={selectedEvent}
+      />
     </>
   );
 }
-
 const styles = StyleSheet.create({
   listContainer: {
     paddingHorizontal: 16,

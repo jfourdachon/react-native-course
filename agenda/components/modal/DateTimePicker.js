@@ -8,12 +8,11 @@ import {
   View,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { getFormattedDate, getFormattedTime } from "../../utils";
+import { getFormattedFullDate, getFormattedTime } from "../../utils";
 import { colors } from "../../constants/colors";
 
-const DateTimePicker = () => {
+const DateTimePicker = ({ label, dateTime, setDateTime, error }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [dateTime, setDateTime] = useState(new Date());
   const [mode, setMode] = useState("date");
 
   const showDate = () => {
@@ -34,20 +33,23 @@ const DateTimePicker = () => {
     hideDatePicker();
   };
 
-  console.log(new Date());
+  const dateTimeStyles = [styles.dateTime];
+  if (error) {
+    dateTimeStyles.push(styles.error);
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Début</Text>
+      <Text style={styles.label}>{label}</Text>
       <View style={styles.dateAndTimeContainer}>
         <Pressable
-          style={[styles.dateContainer, styles.dateTime]}
+          style={[styles.dateContainer, dateTimeStyles]}
           onPress={showDate}
         >
-          <Text>{getFormattedDate(dateTime)}</Text>
+          <Text>{getFormattedFullDate(dateTime)}</Text>
         </Pressable>
         <Pressable
-          style={[styles.timeContainer, styles.dateTime]}
+          style={[styles.timeContainer, dateTimeStyles]}
           onPress={showTime}
         >
           <Text>{getFormattedTime(dateTime)}</Text>
@@ -60,11 +62,12 @@ const DateTimePicker = () => {
         onCancel={hideDatePicker}
         minuteInterval={15}
         locale="fr-FR"
-        minimumDate={new Date(2024, 4, 30)}
-        maximumDate={new Date(2040, 10, 20)}
+        minimumDate={new Date(2024, 0, 1)}
+        maximumDate={new Date(2040, 11, 31)}
         display="spinner"
         cancelTextIOS="Annuler"
         confirmTextIOS="Valider"
+        date={new Date(dateTime)}
       />
     </View>
   );
@@ -103,5 +106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     justifyContent: "center",
     alignItems: "center",
+  },
+  error: {
+    borderColor: "red",
+    borderWidth: 3,
   },
 });

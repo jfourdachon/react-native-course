@@ -3,7 +3,7 @@ import { colors } from "../../constants/colors";
 
 export default function IsOnline({ isEnabled, setIsEnabled }) {
   const toggleSwitch = () => {
-    setIsEnabled((previousState) => !previousState);
+    setIsEnabled(!isEnabled);
   };
   return (
     <View style={styles.container}>
