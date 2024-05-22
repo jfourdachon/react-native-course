@@ -5,33 +5,84 @@ import {
   Text,
   View,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/colors";
 import Input from "./Input";
 import DateTimePicker from "./DateTimePicker";
-import { useState, useEffect, useId } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import IsOnline from "./IsOnline";
 import CustomBtn from "./CustomBtn";
 import ErrorModal from "./ErrorModal";
-import {
-  addEvent,
-  removeEvent,
-  updateEvent,
-} from "../../store/slices/agendaSlice";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import LoadingOverlay from "../overlay/LoadingOverlay";
+import ErrorOverlay from "../overlay/ErrorOverlay";
+import {
+  useCreateEventMutation,
+  useDeleteEventMutation,
+  useGetAllEventsQuery,
+  useUpdateEventMutation,
+} from "../../store/api/agendaApi";
 
 export default function FormWithFormik({
   isFormVisible,
   closeForm,
   selectedEvent,
 }) {
+  /**
+   * AXIOS and Redux slice
+   */
+  // const event = useSelector((state) =>
+  //   state.agenda.events.find((event) => event.id === selectedEvent)
+  // );
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isRemoveLoading, setIsRemoveLoading] = useState(false);
+  // const [httpError, setHttpError] = useState(false);
+  // const dispatch = useDispatch();
+
+  // const httpEventHandler = async (data, httpFn, reducer, setLoadingState) => {
+  //   setLoadingState(true);
+  //   try {
+  //     const newEventId = await httpFn(data);
+  //     if (!data.id) {
+  //       data.id = newEventId;
+  //     }
+  //     dispatch(reducer(data));
+  //     setLoadingState(false);
+  //     closeForm();
+  //   } catch (error) {
+  //     setLoadingState(false);
+  //     setHttpError(true);
+  //     setTimeout(() => {
+  //       closeForm();
+  //       setHttpError(false);
+  //     }, 4000);
+  //   }
+  // };
+
   const closeKeyboardHandler = () => Keyboard.dismiss();
-  const event = useSelector((state) =>
-    state.agenda.events.find((event) => event.id === selectedEvent)
-  );
+  const { data: event, error } = useGetAllEventsQuery(undefined, {
+    skip: !selectedEvent,
+    selectFromResult: ({ data, error }) => ({
+      data: data?.find((item) => item.id === selectedEvent),
+    }),
+  });
+  const [
+    createEvent,
+    { isLoading: isCreating, error: createError, isSuccess: isCreated },
+  ] = useCreateEventMutation();
+
+  const [
+    updateEvent,
+    { isLoading: isUpdating, error: updateError, isSuccess: isUpdated },
+  ] = useUpdateEventMutation();
+
+  const [
+    deleteEvent,
+    { isLoading: isDeleting, error: deleteError, isSuccess: isDeleted },
+  ] = useDeleteEventMutation();
 
   const initialState = event
     ? event
@@ -63,9 +114,7 @@ export default function FormWithFormik({
     isOnline: Yup.boolean(),
   });
 
-  const dispatch = useDispatch();
-
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     const data = {
       title: values.title,
       location: values.location,
@@ -77,24 +126,25 @@ export default function FormWithFormik({
     };
     if (event?.id) {
       data.id = event.id;
-      dispatch(updateEvent(data));
+      updateEvent(data);
     } else {
-      data.id = Date.now().toString();
-      dispatch(addEvent(data));
+      createEvent(data);
     }
-    closeForm();
   };
 
   const removeEvt = () => {
     if (event) {
-      dispatch(removeEvent({ id: event.id }));
+      deleteEvent({ id: event.id });
+    } else {
+      closeForm();
     }
-    closeFormHandler();
   };
 
-  const closeFormHandler = () => {
-    closeForm();
-  };
+  useEffect(() => {
+    if (isCreated || isUpdated || isDeleted) {
+      closeForm();
+    }
+  }, [isCreated, isUpdated, isDeleted]);
 
   return (
     <Modal
@@ -104,14 +154,20 @@ export default function FormWithFormik({
     >
       <Pressable style={styles.formContainer} onPress={closeKeyboardHandler}>
         <View style={styles.headerContainer}>
-          <Text style={styles.formTitle}>Nouvel événement</Text>
-          <Feather
-            name="trash-2"
-            size={28}
-            color={colors.LIGHT}
-            onPress={removeEvt}
-            suppressHighlighting={true}
-          />
+          <Text style={styles.formTitle}>
+            {selectedEvent ? "Modifier l'événement" : "Nouvel énénement"}
+          </Text>
+          {isDeleting ? (
+            <ActivityIndicator color={colors.LIGHT} size="small" />
+          ) : (
+            <Feather
+              name="trash-2"
+              size={28}
+              color={colors.LIGHT}
+              onPress={removeEvt}
+              suppressHighlighting={true}
+            />
+          )}
         </View>
         <Formik
           initialValues={initialState}
@@ -189,12 +245,13 @@ export default function FormWithFormik({
                   <CustomBtn
                     text="Annuler"
                     color={colors.PINK}
-                    onPress={closeFormHandler}
+                    onPress={closeForm}
                   />
                   <CustomBtn
                     text="Valider"
                     color={colors.VIOLET}
                     onPress={handleSubmit}
+                    isLoading={isCreating || isUpdating}
                   />
                 </View>
                 <ErrorModal
@@ -202,6 +259,12 @@ export default function FormWithFormik({
                   closeModal={setStatus}
                   errors={errors}
                 />
+                {isCreating || isUpdating || isDeleting ? (
+                  <LoadingOverlay />
+                ) : null}
+                {createError || updateError || deleteError ? (
+                  <ErrorOverlay />
+                ) : null}
               </>
             );
           }}
