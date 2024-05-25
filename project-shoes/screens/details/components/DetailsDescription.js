@@ -11,21 +11,42 @@ import {
   addFavorite,
   removeFavorite,
 } from "../../../store/slices/favoritesSlice";
+import {
+  useAddFavoriteMutation,
+  useGetAllFavoritesQuery,
+  useUpdateFavoritesMutation,
+} from "../../../store/api/favoritesApi";
 
 export default function DetailsDescription({ name, price, description, id }) {
-  const dispatch = useDispatch();
-  const favoritesShoesIds = useSelector(
-    (state) => state.favorites.favoritesShoesIds
-  );
+  // const dispatch = useDispatch();
+  // const favoritesShoesIds = useSelector(
+  //   (state) => state.favorites.favoritesShoesIds
+  // );
 
-  const isFavorite = favoritesShoesIds.includes(id);
-  const iconName = isFavorite ? "star" : "staro";
+  const [addToFavorite] = useAddFavoriteMutation();
+  const [updateFavorites] = useUpdateFavoritesMutation();
+  const { data: favorite, favorites } = useGetAllFavoritesQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      data: data?.shoesIds?.find((elem) => elem === id),
+      favorites: data,
+    }),
+  });
+  // const isFavorite = favoritesShoesIds.includes(id)
+  const iconName = favorite ? "star" : "staro";
 
   const toggleFavorite = () => {
-    if (isFavorite) {
-      dispatch(removeFavorite(id));
+    if (favorite) {
+      updateFavorites({
+        id: favorites.id,
+        shoesIds: favorites.shoesIds.filter((el) => el !== id),
+      });
+    } else if (favorites?.id) {
+      updateFavorites({
+        id: favorites.id,
+        shoesIds: [...favorites.shoesIds, id],
+      });
     } else {
-      dispatch(addFavorite(id));
+      addToFavorite(id);
     }
   };
 
