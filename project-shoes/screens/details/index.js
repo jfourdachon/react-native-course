@@ -7,12 +7,18 @@ import Sizes from "./components/Sizes";
 import CustomButton from "../../ui-components/buttons/CustomButton";
 import { spaces } from "../../constants/spaces";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addShoesToCart } from "../../store/slices/cartSlice";
+import {
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from "../../store/api/userApi";
 
 export default function Details({ route, navigation }) {
   const dispatch = useDispatch();
-
+  const userId = useSelector((state) => state.user.id);
+  const { data: user, isLoading } = useGetUserQuery(userId);
+  const [updateUser] = useUpdateUserMutation();
   const data = shoes
     .find((el) => el.stock.find((item) => item.id === route.params.id))
     .stock.find((item) => item.id === route.params.id);
@@ -27,6 +33,26 @@ export default function Details({ route, navigation }) {
   const [sizes, setSizes] = useState(data.items[0].sizes);
 
   const addToCart = () => {
+    const item = {
+      id: data.id + Date.now(),
+      name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
+      image: selectedImage,
+      size: selectedSize,
+      price: data.price,
+      quantity: 1,
+    };
+    const shoes = user?.cart?.shoes ? [...user.cart.shoes, item] : [item];
+    const totalAmount = user?.cart?.totalAmount
+      ? user.cart.totalAmount + data.price
+      : data.price;
+
+    updateUser({
+      id: userId,
+      cart: {
+        shoes,
+        totalAmount,
+      },
+    });
     dispatch(
       addShoesToCart({
         id: data.id + Date.now(),

@@ -24,6 +24,8 @@ import DrawerIcon from "../assets/images/navigation/drawer.svg";
 import { spaces } from "../constants/spaces";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { useGetUserQuery } from "../store/api/userApi";
+import { shoes } from "../data/shoes";
 
 const Tabs = createBottomTabNavigator();
 
@@ -32,7 +34,11 @@ const originalHeight = IS_LARGE_SCREEN ? 212 : 106;
 const aspectRatio = originalWidth / originalHeight;
 
 export default function BottomTabsNavigator() {
-  const badgeCount = useSelector((state) => state.cart.shoes.length);
+  // const badgeCount = useSelector((state) => state.cart.shoes.length);
+  const userId = useSelector((state) => state.user.id);
+  const { data: user } = useGetUserQuery(userId);
+  const badgeCount = user?.cart?.shoes?.length;
+
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   return (

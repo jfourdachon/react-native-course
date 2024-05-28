@@ -5,50 +5,61 @@ export const favoritesApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.EXPO_PUBLIC_API_URL }),
   endpoints: (build) => ({
     getAllFavorites: build.query({
-      query: () => "favorites.json",
-      transformResponse: (response) => {
-        const favorites = {};
+      query: (id) => `users/${id}.json`,
+      transformResponse: (response, meta, arg) => {
+        let result = [];
+
         for (const key in response) {
-          favorites.id = key;
-          favorites.shoesIds = [...response[key]];
+          if (response[key].favorites) {
+            result.push(...response[key].favorites);
+          }
         }
-        return favorites;
+        return result;
       },
+      transformErrorResponse: (err) => console.log({ err }),
     }),
-    addFavorite: build.mutation({
-      query: (shoesId) => ({
-        url: "favorites.json",
-        method: "POST",
-        body: [shoesId],
-      }),
-      async onQueryStarted(shoesId, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          const patchResult = dispatch(
-            favoritesApi.util.upsertQueryData("getAllFavorites", undefined, {
-              id: data.name,
-              shoesIds: [shoesId],
-            })
-          );
-        } catch {}
-      },
-    }),
+    // addFavorite: build.mutation({
+    //   query: (shoesId) => ({
+    //     url: "favorites.json",
+    //     method: "POST",
+    //     body: [shoesId],
+    //   }),
+    //   async onQueryStarted(shoesId, { dispatch, queryFulfilled }) {
+    //     try {
+    //       const { data } = await queryFulfilled;
+    //       const patchResult = dispatch(
+    //         favoritesApi.util.upsertQueryData("getAllFavorites", undefined, {
+    //           id: data.name,
+    //           shoesIds: [shoesId],
+    //         })
+    //       );
+    //     } catch {}
+    //   },
+    // }),
     updateFavorites: build.mutation({
-      query: ({ id, shoesIds }) => ({
-        url: `favorites/${id}.json`,
-        method: "PUT",
-        body: shoesIds,
+      query: ({ id, favorites }) => ({
+        url: `users/${id}.json`,
+        method: "PATCH",
+        body: { favorites },
       }),
+      transformErrorResponse: (err) => {
+        console.log(err);
+      },
+      transformResponse: (res) => {
+        console.log(res);
+      },
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        console.log({ arg });
         const patchResult = dispatch(
           favoritesApi.util.updateQueryData(
             "getAllFavorites",
             undefined,
             (draft) => {
-              if (arg.shoesIds?.length === 0) {
-                draft.id = null;
-              }
-              draft.shoesIds = arg.shoesIds;
+              console.log({ draft, arg });
+              // if (arg.favorites?.length === 0) {
+              //   draft.id = null;
+              // }
+              draft.favorites = arg.favorites;
             }
           )
         );
@@ -64,6 +75,6 @@ export const favoritesApi = createApi({
 
 export const {
   useGetAllFavoritesQuery,
-  useAddFavoriteMutation,
+  useLazyGetAllFavoritesQuery,
   useUpdateFavoritesMutation,
 } = favoritesApi;

@@ -2,10 +2,11 @@ import { Text, StyleSheet } from "react-native";
 import { textSize } from "../../constants/textSize";
 import { colors } from "../../constants/colors";
 
-const TextMediumM = ({ children, blue = false, style }) => {
+const TextMediumM = ({ children, blue = false, style, ...textProps }) => {
   return (
     <Text
       style={[styles.txt, { color: blue ? colors.BLUE : colors.DARK }, style]}
+      {...textProps}
     >
       {children}
     </Text>

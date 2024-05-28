@@ -1,16 +1,20 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import TextBoldL from "../texts/TextBoldL";
 import { colors } from "../../constants/colors";
 import { radius } from "../../constants/radius";
 
-export default function CustomButton({ text, onPress }) {
+export default function CustomButton({ text, onPress, isLoading }) {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       style={styles.btnContainer}
       onPress={onPress}
     >
-      <TextBoldL style={styles.btnText}>{text}</TextBoldL>
+      {isLoading ? (
+        <ActivityIndicator color={colors.LIGHT} size="small" />
+      ) : (
+        <TextBoldL style={styles.btnText}>{text}</TextBoldL>
+      )}
     </TouchableOpacity>
   );
 }
