@@ -8,7 +8,12 @@ import CustomButton from "../../../ui-components/buttons/CustomButton";
 import TextMediumM from "../../../ui-components/texts/TextMediumM";
 import TextBoldM from "../../../ui-components/texts/TextBoldM";
 
-export default function AuthForm({ loginScreen, navigate }) {
+export default function AuthForm({
+  loginScreen,
+  navigate,
+  submitFormHandler,
+  isLoading,
+}) {
   const initialValues = loginScreen
     ? { email: "", password: "" }
     : {
@@ -42,7 +47,7 @@ export default function AuthForm({ loginScreen, navigate }) {
     <View style={styles.formContainer}>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={submitFormHandler}
         validationSchema={validationSchema}
       >
         {({
@@ -89,7 +94,11 @@ export default function AuthForm({ loginScreen, navigate }) {
               />
             ) : null}
 
-            <CustomButton text="Valider" onPress={handleSubmit} />
+            <CustomButton
+              text="Valider"
+              onPress={handleSubmit}
+              isLoading={isLoading}
+            />
           </>
         )}
       </Formik>

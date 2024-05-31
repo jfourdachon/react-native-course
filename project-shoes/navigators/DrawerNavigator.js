@@ -18,7 +18,6 @@ import CartIcon from "../assets/images/navigation/cart.svg";
 import NotificationsIcon from "../assets/images/navigation/notifications.svg";
 import FavoriteIcon from "../assets/images/navigation/favorite.svg";
 import { useSelector } from "react-redux";
-import { useGetUserQuery } from "../store/api/userApi";
 
 const Drawer = createDrawerNavigator();
 
@@ -74,9 +73,7 @@ const Label = ({ shoesInCartCount, label, activeIndex, index }) => {
 
 function CustomDrawerContent(props) {
   const activeIndex = props.state.routes[0].state?.index || 0;
-  const userId = useSelector((state) => state.user.id);
-  const { data: user } = useGetUserQuery(userId);
-  const shoesInCartCount = user?.cart?.shoes?.length;
+  const shoesInCartCount = useSelector((state) => state.cart.shoes.length);
   return (
     <DrawerContentScrollView>
       <View style={styles.userInfosContainer}>

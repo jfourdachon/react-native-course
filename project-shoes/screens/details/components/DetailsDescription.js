@@ -6,45 +6,37 @@ import { colors } from "../../../constants/colors";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";
 import { AntDesign } from "@expo/vector-icons";
 import { ICON_SIZE } from "../../../constants/sizes";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  addFavorite,
-  removeFavorite,
-} from "../../../store/slices/favoritesSlice";
-import {
-  // useAddFavoriteMutation,
+  useAddFavoriteMutation,
   useGetAllFavoritesQuery,
   useUpdateFavoritesMutation,
 } from "../../../store/api/favoritesApi";
-import {
-  useGetUserQuery,
-  useUpdateUserMutation,
-} from "../../../store/api/userApi";
 
 export default function DetailsDescription({ name, price, description, id }) {
-  const [updateUser] = useUpdateUserMutation();
-  const userId = useSelector((state) => state.user.id);
+  const [addToFavorite] = useAddFavoriteMutation();
+  const [updateFavorites] = useUpdateFavoritesMutation();
+  const { data: favorite, favorites } = useGetAllFavoritesQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      data: data?.shoesIds?.find((elem) => elem === id),
+      favorites: data,
+    }),
+  });
+  // const isFavorite = favoritesShoesIds.includes(id)
+  const iconName = favorite ? "star" : "staro";
 
-  const { data: user } = useGetUserQuery(userId);
-  const isFavorite = user?.favoritesIds?.includes(id);
-
-  const iconName = isFavorite ? "star" : "staro";
   const toggleFavorite = () => {
-    if (isFavorite) {
-      updateUser({
-        id: userId,
-        favoritesIds: user.favoritesIds.filter((el) => el !== id),
+    if (favorite) {
+      updateFavorites({
+        id: favorites.id,
+        shoesIds: favorites.shoesIds.filter((el) => el !== id),
       });
-    } else if (user?.favoritesIds) {
-      updateUser({
-        id: userId,
-        favoritesIds: [...user.favoritesIds, id],
+    } else if (favorites?.id) {
+      updateFavorites({
+        id: favorites.id,
+        shoesIds: [...favorites.shoesIds, id],
       });
     } else {
-      updateUser({
-        id: userId,
-        favoritesIds: [id],
-      });
+      addToFavorite(id);
     }
   };
 

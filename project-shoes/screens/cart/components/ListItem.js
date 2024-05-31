@@ -13,26 +13,17 @@ import {
   increaseQuantity,
   removeShoesFromCart,
 } from "../../../store/slices/cartSlice";
-import { useUpdateUserMutation } from "../../../store/api/userApi";
 
-export default function ListItem({
-  item,
-  removeShoesFromCart,
-  updateQuantity,
-}) {
+export default function ListItem({ item }) {
   const dispatch = useDispatch();
 
-  const decreaseShoesQuantity = () => {
-    if (item.quantity > 1) updateQuantity(item.id, false);
-  };
+  const decreaseShoesQuantity = () =>
+    dispatch(deacreaseQuantity({ id: item.id }));
 
-  const increaseShoesQuantity = () => {
-    updateQuantity(item.id, true);
-  };
+  const increaseShoesQuantity = () =>
+    dispatch(increaseQuantity({ id: item.id }));
 
-  const removeShoes = () => {
-    removeShoesFromCart(item.id);
-  };
+  const removeShoes = () => dispatch(removeShoesFromCart({ id: item.id }));
 
   return (
     <View style={styles.container}>

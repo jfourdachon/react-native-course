@@ -3,10 +3,10 @@ import reactotron from "../ReactotronConfig";
 import favoriteReducer from "./slices/favoritesSlice";
 import notificationReducer from "./slices/notificationsSlice";
 import cartReducer from "./slices/cartSlice";
-import userReducer from "./slices/userSlice";
 import { favoritesApi } from "./api/favoritesApi";
 import { notificationsApi } from "./api/notificationsApi";
 import { userApi } from "./api/userApi";
+import userReducer from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {

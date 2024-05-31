@@ -6,21 +6,21 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     getUser: builder.query({
       query: () => `users.json`,
-      transformResponse: (response) => {
-        // console.log("get user");
-        const users = [];
+      transformResponse: (response, meta, { email }) => {
+        let user = {};
         for (const key in response) {
-          const user = {
-            id: key,
-            ...response[key],
-          };
-          users.push(user);
+          if (response[key].email === email) {
+            user = {
+              id: key,
+              ...response[key],
+            };
+          }
         }
-        return users[0];
+        return user;
       },
-      transformErrorResponse: (error) => {
-        console.log(error);
-      },
+    }),
+    getUserById: builder.query({
+      query: (id) => `users/${id}.json`,
     }),
     createUser: builder.mutation({
       query: (user) => ({
@@ -40,8 +40,8 @@ export const userApi = createApi({
       }),
       async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          userApi.util.updateQueryData("getUser", id, (draft) => {
-            Object.assign(draft, patch);
+          userApi.util.updateQueryData("getUserById", id, (existingUser) => {
+            Object.assign(existingUser, patch);
           })
         );
         try {
@@ -55,8 +55,9 @@ export const userApi = createApi({
 });
 
 export const {
-  useLazyGetUserQuery,
   useGetUserQuery,
+  useLazyGetUserQuery,
+  useGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
 } = userApi;
