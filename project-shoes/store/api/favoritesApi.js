@@ -7,7 +7,6 @@ export const favoritesApi = createApi({
     getAllFavorites: build.query({
       query: () => "favorites.json",
       transformResponse: (response) => {
-        console.log("get favorites");
         const favorites = {};
         for (const key in response) {
           favorites.id = key;

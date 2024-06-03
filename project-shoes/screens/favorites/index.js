@@ -13,11 +13,14 @@ import { spaces } from "../../constants/spaces";
 import { useSelector } from "react-redux";
 import TextBoldL from "../../ui-components/texts/TextBoldL";
 import { useGetAllFavoritesQuery } from "../../store/api/favoritesApi";
+import { useGetUserByIdQuery } from "../../store/api/userApi";
 
 export default function Favorites({ navigation }) {
-  const { data: favoriteShoes, isLoading } = useGetAllFavoritesQuery();
+  const userId = useSelector((state) => state.user.id);
+  const { data: user, isLoading } = useGetUserByIdQuery(userId);
+  console.log({ userId, user });
 
-  const data = favoriteShoes?.shoesIds?.map((id) =>
+  const data = user?.favoritesIds?.map((id) =>
     shoes
       .find((item) => item.stock.find((elem) => elem.id === id))
       .stock.find((el) => el.id === id)
@@ -44,7 +47,7 @@ export default function Favorites({ navigation }) {
     );
   }
 
-  if (!favoriteShoes?.id) {
+  if (!user?.favoritesIds?.length) {
     return (
       <View style={styles.emptyListContainer}>
         <TextBoldL>Vous n'avez pas encore de favoris</TextBoldL>

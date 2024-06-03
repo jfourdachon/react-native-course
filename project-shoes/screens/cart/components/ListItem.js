@@ -7,23 +7,25 @@ import { ICON_SIZE } from "../../../constants/sizes";
 import { colors } from "../../../constants/colors";
 import { spaces } from "../../../constants/spaces";
 import { radius } from "../../../constants/radius";
-import { useDispatch } from "react-redux";
-import {
-  deacreaseQuantity,
-  increaseQuantity,
+
+export default function ListItem({
+  item,
   removeShoesFromCart,
-} from "../../../store/slices/cartSlice";
+  updateQuantity,
+}) {
+  const decreaseShoesQuantity = () => {
+    if (item.quantity > 1) {
+      updateQuantity(item.id, false);
+    }
+  };
 
-export default function ListItem({ item }) {
-  const dispatch = useDispatch();
+  const increaseShoesQuantity = () => {
+    updateQuantity(item.id, true);
+  };
 
-  const decreaseShoesQuantity = () =>
-    dispatch(deacreaseQuantity({ id: item.id }));
-
-  const increaseShoesQuantity = () =>
-    dispatch(increaseQuantity({ id: item.id }));
-
-  const removeShoes = () => dispatch(removeShoesFromCart({ id: item.id }));
+  const removeShoes = () => {
+    removeShoesFromCart(item.id);
+  };
 
   return (
     <View style={styles.container}>

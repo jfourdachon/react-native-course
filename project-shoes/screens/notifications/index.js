@@ -15,12 +15,17 @@ import {
   useGetAllSeenNotificationsQuery,
   useUpdateSeenNotificationsMutation,
 } from "../../store/api/notificationsApi";
+import { useSelector } from "react-redux";
+import {
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "../../store/api/userApi";
 
 const ids = ["adi3p", "adi7p", "adi203p"];
 export default function Notifications({ navigation }) {
-  const { data: seenNotifs, isLoading } = useGetAllSeenNotificationsQuery();
-  const [addSeenNotif] = useAddSeenNotificationsMutation();
-  const [updateSeenNotif] = useUpdateSeenNotificationsMutation();
+  const userId = useSelector((state) => state.user.id);
+  const { data: user, isLoading } = useGetUserByIdQuery(userId);
+  const [updateUser] = useUpdateUserMutation();
 
   const data = ids.map((id) =>
     shoes
@@ -31,13 +36,16 @@ export default function Notifications({ navigation }) {
   const navigateToDetails = (id) => navigation.navigate("Details", { id });
 
   const updateNotif = (id) => {
-    if (seenNotifs.id) {
-      updateSeenNotif({
-        id: seenNotifs.id,
-        notifsIds: [...seenNotifs.notifsIds, id],
+    if (user?.seenNotifsIds) {
+      updateUser({
+        id: userId,
+        seenNotifsIds: [...user.seenNotifsIds, id],
       });
     } else {
-      addSeenNotif(id);
+      updateUser({
+        id: userId,
+        seenNotifsIds: [id],
+      });
     }
   };
 

@@ -11,32 +11,35 @@ import {
   useGetAllFavoritesQuery,
   useUpdateFavoritesMutation,
 } from "../../../store/api/favoritesApi";
+import { useSelector } from "react-redux";
+import {
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "../../../store/api/userApi";
 
 export default function DetailsDescription({ name, price, description, id }) {
-  const [addToFavorite] = useAddFavoriteMutation();
-  const [updateFavorites] = useUpdateFavoritesMutation();
-  const { data: favorite, favorites } = useGetAllFavoritesQuery(undefined, {
-    selectFromResult: ({ data }) => ({
-      data: data?.shoesIds?.find((elem) => elem === id),
-      favorites: data,
-    }),
-  });
-  // const isFavorite = favoritesShoesIds.includes(id)
-  const iconName = favorite ? "star" : "staro";
+  const userId = useSelector((state) => state.user.id);
+  const { data: user } = useGetUserByIdQuery(userId);
+  const [updateUser] = useUpdateUserMutation();
+  const isFavorite = user?.favoritesIds?.includes(id);
+  const iconName = isFavorite ? "star" : "staro";
 
   const toggleFavorite = () => {
-    if (favorite) {
-      updateFavorites({
-        id: favorites.id,
-        shoesIds: favorites.shoesIds.filter((el) => el !== id),
+    if (isFavorite) {
+      updateUser({
+        id: userId,
+        favoritesIds: user.favoritesIds.filter((el) => el !== id),
       });
-    } else if (favorites?.id) {
-      updateFavorites({
-        id: favorites.id,
-        shoesIds: [...favorites.shoesIds, id],
+    } else if (user?.favoritesIds) {
+      updateUser({
+        id: userId,
+        favoritesIds: [...user.favoritesIds, id],
       });
     } else {
-      addToFavorite(id);
+      updateUser({
+        id: userId,
+        favoritesIds: [id],
+      });
     }
   };
 
