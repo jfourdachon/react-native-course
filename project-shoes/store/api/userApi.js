@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({
   reducerPath: "useApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.EXPO_PUBLIC_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://fake.url.com/" }),
   endpoints: (builder) => ({
     getUser: builder.query({
       query: () => `users.json`,

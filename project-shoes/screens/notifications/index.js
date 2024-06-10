@@ -10,11 +10,7 @@ import { colors } from "../../constants/colors";
 import ItemSeparator from "../../ui-components/separators/ListItemSeparator";
 import { spaces } from "../../constants/spaces";
 import ListItem from "./components/ListItem";
-import {
-  useAddSeenNotificationsMutation,
-  useGetAllSeenNotificationsQuery,
-  useUpdateSeenNotificationsMutation,
-} from "../../store/api/notificationsApi";
+
 import { useSelector } from "react-redux";
 import {
   useGetUserByIdQuery,
@@ -25,6 +21,7 @@ const ids = ["adi3p", "adi7p", "adi203p"];
 export default function Notifications({ navigation }) {
   const userId = useSelector((state) => state.user.id);
   const { data: user, isLoading } = useGetUserByIdQuery(userId);
+
   const [updateUser] = useUpdateUserMutation();
 
   const data = ids.map((id) =>
