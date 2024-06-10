@@ -6,26 +6,40 @@ import { colors } from "../../../constants/colors";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";
 import { AntDesign } from "@expo/vector-icons";
 import { ICON_SIZE } from "../../../constants/sizes";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  addFavorite,
-  removeFavorite,
-} from "../../../store/slices/favoritesSlice";
+  useAddFavoriteMutation,
+  useGetAllFavoritesQuery,
+  useUpdateFavoritesMutation,
+} from "../../../store/api/favoritesApi";
+import { useSelector } from "react-redux";
+import {
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "../../../store/api/userApi";
 
 export default function DetailsDescription({ name, price, description, id }) {
-  const dispatch = useDispatch();
-  const favoritesShoesIds = useSelector(
-    (state) => state.favorites.favoritesShoesIds
-  );
-
-  const isFavorite = favoritesShoesIds.includes(id);
+  const userId = useSelector((state) => state.user.id);
+  const { data: user } = useGetUserByIdQuery(userId);
+  const [updateUser] = useUpdateUserMutation();
+  const isFavorite = user?.favoritesIds?.includes(id);
   const iconName = isFavorite ? "star" : "staro";
 
   const toggleFavorite = () => {
     if (isFavorite) {
-      dispatch(removeFavorite(id));
+      updateUser({
+        id: userId,
+        favoritesIds: user.favoritesIds.filter((el) => el !== id),
+      });
+    } else if (user?.favoritesIds) {
+      updateUser({
+        id: userId,
+        favoritesIds: [...user.favoritesIds, id],
+      });
     } else {
-      dispatch(addFavorite(id));
+      updateUser({
+        id: userId,
+        favoritesIds: [id],
+      });
     }
   };
 
