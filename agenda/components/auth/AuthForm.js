@@ -11,6 +11,8 @@ export default function AuthForm({
   navigate,
   submitFormHandler,
   isLoading,
+  error,
+  setHttpError,
 }) {
   const initialValues = loginScreen
     ? { email: "", password: "" }
@@ -62,9 +64,12 @@ export default function AuthForm({
           status,
           setStatus,
         }) => {
+          const removeErrors = () => {
+            setStatus();
+            setHttpError();
+          };
           if (
-            isSubmitting &&
-            Object.keys(errors).length &&
+            ((isSubmitting && Object.keys(errors).length) || error) &&
             status !== "error"
           ) {
             setStatus("error");
@@ -111,8 +116,8 @@ export default function AuthForm({
               </View>
               <ErrorModal
                 isModalVisible={status === "error"}
-                closeModal={setStatus}
-                errors={errors}
+                closeModal={removeErrors}
+                errors={error || errors}
               />
             </View>
           );
