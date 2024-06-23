@@ -3,6 +3,7 @@ import { useSignMutation } from "../../store/api/authApi";
 import AuthForm from "./AuthForm";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ export default function Login({ navigation }) {
       email: values.email,
       password: values.password,
       endpoint: "signInWithPassword",
+    }).then(() => {
+      SecureStore.setItemAsync("credentials", JSON.stringify(values));
     });
   };
 

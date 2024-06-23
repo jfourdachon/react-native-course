@@ -15,6 +15,7 @@ import { useGetAllEventsQuery } from "../../store/api/agendaApi";
 import { useDispatch, useSelector } from "react-redux";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { setToken } from "../../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
 const Header = ({ openForm, logout }) => (
   <View style={styles.headerContainer}>
@@ -87,6 +88,7 @@ export default function AgendaList() {
 
   const logout = () => {
     dispatch(setToken());
+    SecureStore.deleteItemAsync("credentials");
   };
 
   return (

@@ -3,6 +3,7 @@ import { useSignMutation } from "../../store/api/authApi";
 import AuthForm from "./AuthForm";
 import { setToken } from "../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import * as SecureStore from "expo-secure-store";
 
 export default function Signup({ navigation }) {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ export default function Signup({ navigation }) {
       email: values.email,
       password: values.password,
       endpoint: "signUp",
+    }).then(() => {
+      SecureStore.setItemAsync("credentials", JSON.stringify(values));
     });
   };
   useEffect(() => {

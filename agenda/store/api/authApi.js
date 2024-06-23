@@ -7,7 +7,7 @@ const errorMessages = {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "process.env.EXPO_PUBLIC_AUTH_URL",
+    baseUrl: process.env.EXPO_PUBLIC_AUTH_URL,
   }),
   endpoints: (builder) => ({
     sign: builder.mutation({
