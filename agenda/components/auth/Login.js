@@ -13,16 +13,18 @@ export default function Login({ navigation }) {
   const navigateToSignup = () => {
     navigation.replace("Signup");
   };
+  console.log(data);
   const submitFormHandler = (values) => {
     signIn({
       email: values.email,
       password: values.password,
       endpoint: "signInWithPassword",
-    }).then(() => {
+    }).then((response) => {
       SecureStore.setItemAsync("credentials", JSON.stringify(values));
+      SecureStore.setItemAsync("refreshToken", response.data.refreshToken);
     });
   };
-
+  console.log(data);
   useEffect(() => {
     if (data) {
       dispatch(setToken(data.idToken));

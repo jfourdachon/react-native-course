@@ -17,8 +17,9 @@ export default function Signup({ navigation }) {
       email: values.email,
       password: values.password,
       endpoint: "signUp",
-    }).then(() => {
+    }).then((response) => {
       SecureStore.setItemAsync("credentials", JSON.stringify(values));
+      SecureStore.setItemAsync("refreshToken", response.data.refreshToken);
     });
   };
   useEffect(() => {

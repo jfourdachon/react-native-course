@@ -5,7 +5,7 @@ import Login from "../components/auth/Login";
 import AgendaList from "../components/agenda/AgendaList";
 import { colors } from "../constants/colors";
 import { useDispatch, useSelector } from "react-redux";
-import { useSignMutation } from "../store/api/authApi";
+import { useRefreshTokenMutation, useSignMutation } from "../store/api/authApi";
 import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
@@ -17,6 +17,7 @@ export default function StackNavigator() {
   const token = useSelector((state) => state.auth.idToken);
   const [isLoading, setIsLoading] = useState(!!token ? false : true);
   const [signiIn, { data, error }] = useSignMutation();
+  const [refreshTokenMutation] = useRefreshTokenMutation();
   const dispatch = useDispatch();
 
   const autoLogin = async () => {
@@ -36,6 +37,17 @@ export default function StackNavigator() {
   useEffect(() => {
     if (!token) {
       autoLogin();
+    } else {
+      // console.log(token);
+      setTimeout(async () => {
+        const refreshToken = await SecureStore.getItemAsync("refreshToken");
+        if (refreshToken) {
+          refreshTokenMutation(refreshToken).then((res) => {
+            dispatch(setToken(res.data.id_token));
+            SecureStore.setItemAsync("refrshToken", res.data.refresh_token);
+          });
+        }
+      }, 3570000);
     }
   }, [token]);
 
