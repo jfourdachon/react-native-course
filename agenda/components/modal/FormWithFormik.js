@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/colors";
-import Input from "./Input";
+import Input from "../shared/Input";
 import DateTimePicker from "./DateTimePicker";
 import { useEffect } from "react";
 import IsOnline from "./IsOnline";
 import CustomBtn from "./CustomBtn";
-import ErrorModal from "./ErrorModal";
+import ErrorModal from "../shared/ErrorModal";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import LoadingOverlay from "../overlay/LoadingOverlay";
@@ -25,6 +25,7 @@ import {
   useGetAllEventsQuery,
   useUpdateEventMutation,
 } from "../../store/api/agendaApi";
+import { useSelector } from "react-redux";
 
 export default function FormWithFormik({
   isFormVisible,
@@ -62,8 +63,9 @@ export default function FormWithFormik({
   //   }
   // };
 
+  const token = useSelector((state) => state.auth.idToken);
   const closeKeyboardHandler = () => Keyboard.dismiss();
-  const { data: event, error } = useGetAllEventsQuery(undefined, {
+  const { data: event, error } = useGetAllEventsQuery(token, {
     skip: !selectedEvent,
     selectFromResult: ({ data, error }) => ({
       data: data?.find((item) => item.id === selectedEvent),
@@ -125,16 +127,15 @@ export default function FormWithFormik({
       isOnline: values.isOnline,
     };
     if (event?.id) {
-      data.id = event.id;
-      updateEvent(data);
+      updateEvent({ id: event.id, event: data, token });
     } else {
-      createEvent(data);
+      createEvent({ event: data, token });
     }
   };
 
   const removeEvt = () => {
     if (event) {
-      deleteEvent({ id: event.id });
+      deleteEvent({ id: event.id, token });
     } else {
       closeForm();
     }

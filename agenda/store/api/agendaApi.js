@@ -9,7 +9,7 @@ export const agendaApi = createApi({
   endpoints: (builder) => ({
     getAllEvents: builder.query({
       providesTags: ["Events"],
-      query: () => "events.json",
+      query: (token) => "events.json?auth=" + token,
       transformResponse: (response) => {
         const events = [];
         for (const key in response) {
@@ -23,29 +23,30 @@ export const agendaApi = createApi({
           (a, b) => new Date(a.startDate) - new Date(b.startDate)
         );
       },
-      transformErrorResponse: () =>
-        "Une erreur s'est produite. Veuillez ré-essayer ultérieurement",
+      transformErrorResponse: () => {
+        return "Une erreur s'est produite. Veuillez ré-essayer ultérieurement";
+      },
     }),
     createEvent: builder.mutation({
       invalidatesTags: ["Events"],
-      query: (event) => ({
-        url: "events.json",
+      query: ({ event, token }) => ({
+        url: "events.json?auth=" + token,
         method: "POST",
         body: event,
       }),
     }),
     updateEvent: builder.mutation({
       invalidatesTags: ["Events"],
-      query: ({ id, ...event }) => ({
-        url: `events/${id}.json`,
+      query: ({ id, event, token }) => ({
+        url: `events/${id}.json?auth=${token}`,
         method: "PATCH",
         body: event,
       }),
     }),
     deleteEvent: builder.mutation({
       invalidatesTags: ["Events"],
-      query: ({ id }) => ({
-        url: `events/${id}.json`,
+      query: ({ id, token }) => ({
+        url: `events/${id}.json?auth=${token}`,
         method: "DELETE",
       }),
     }),

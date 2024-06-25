@@ -8,13 +8,13 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/colors";
-import Input from "./Input";
+import Input from "../shared/Input";
 import DateTimePicker from "./DateTimePicker";
 import { useState, useEffect, useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import IsOnline from "./IsOnline";
 import CustomBtn from "./CustomBtn";
-import ErrorModal from "./ErrorModal";
+import ErrorModal from "../shared/ErrorModal";
 import {
   addEvent,
   removeEvent,

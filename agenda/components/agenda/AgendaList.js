@@ -12,10 +12,19 @@ import { colors } from "../../constants/colors";
 import { useState } from "react";
 import FormWithFormik from "../modal/FormWithFormik";
 import { useGetAllEventsQuery } from "../../store/api/agendaApi";
+import { useDispatch, useSelector } from "react-redux";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import { setToken } from "../../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
-const Header = ({ openForm }) => (
+const Header = ({ openForm, logout }) => (
   <View style={styles.headerContainer}>
-    <View />
+    <SimpleLineIcons
+      name="logout"
+      size={24}
+      color={colors.VIOLET}
+      onPress={logout}
+    />
     <Text style={styles.title}>AGENDA</Text>
     <AntDesign
       name="pluscircle"
@@ -60,7 +69,9 @@ export default function AgendaList() {
   // const [isLoading, setIsLoading] = useState(false);
   // const [httpError, setHttpError] = useState(false);
 
-  const { data, isLoading: loading, error } = useGetAllEventsQuery();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.idToken);
+  const { data, isLoading: loading, error } = useGetAllEventsQuery(token);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState();
 
@@ -75,6 +86,12 @@ export default function AgendaList() {
     setIsFormVisible(true);
   };
 
+  const logout = () => {
+    dispatch(setToken());
+    SecureStore.deleteItemAsync("credentials");
+    SecureStore.deleteItemAsync("refreshToken");
+  };
+
   return (
     <>
       <FlatList
@@ -85,7 +102,9 @@ export default function AgendaList() {
         renderItem={({ item }) => (
           <ListItem item={item} selectItem={selectEvent} />
         )}
-        ListHeaderComponent={<Header openForm={openFormHandler} />}
+        ListHeaderComponent={
+          <Header openForm={openFormHandler} logout={logout} />
+        }
         ListEmptyComponent={
           <ListEmptyComponent isLoading={loading} error={error} />
         }
