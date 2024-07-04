@@ -15,6 +15,7 @@ import HttpErrorModal from "../ui-components/modals/HttpErrorModal";
 const Stack = createNativeStackNavigator();
 
 export default function MainStackNavigator() {
+  const token = useSelector((state) => state.auth.token);
   const httpError = useSelector((state) => state.error.httpError);
   const dispatch = useDispatch();
   const closeHttpErrorModal = () => {
@@ -32,49 +33,64 @@ export default function MainStackNavigator() {
           headerTitleAlign: "center",
         })}
       >
-        <Stack.Screen
-          component={Login}
-          name="Login"
-          options={{ title: "Connexion" }}
-        />
-        <Stack.Screen
-          component={Signup}
-          name="Signup"
-          options={{
-            title: "Formulaire d'inscription",
-          }}
-        />
-        <Stack.Screen
-          component={DrawerNavigator}
-          name="Drawer"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          component={Details}
-          name="Details"
-          options={({ navigation }) => ({
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color={colors.DARK} />
-              </Pressable>
-            ),
-          })}
-        />
-        <Stack.Screen
-          component={Cart}
-          name="MainCart"
-          options={({ navigation }) => ({
-            title: "Mon Panier",
-            animation: "slide_from_bottom",
-            headerLeft: () => (
-              <Pressable onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back" size={24} color={colors.DARK} />
-              </Pressable>
-            ),
-          })}
-        />
+        {!token ? (
+          <>
+            <Stack.Screen
+              component={Login}
+              name="Login"
+              options={{ title: "Connexion" }}
+            />
+            <Stack.Screen
+              component={Signup}
+              name="Signup"
+              options={{
+                title: "Formulaire d'inscription",
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              component={DrawerNavigator}
+              name="Drawer"
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              component={Details}
+              name="Details"
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Pressable onPress={() => navigation.goBack()}>
+                    <Ionicons
+                      name="chevron-back"
+                      size={24}
+                      color={colors.DARK}
+                    />
+                  </Pressable>
+                ),
+              })}
+            />
+            <Stack.Screen
+              component={Cart}
+              name="MainCart"
+              options={({ navigation }) => ({
+                title: "Mon Panier",
+                animation: "slide_from_bottom",
+                headerLeft: () => (
+                  <Pressable onPress={() => navigation.goBack()}>
+                    <Ionicons
+                      name="chevron-back"
+                      size={24}
+                      color={colors.DARK}
+                    />
+                  </Pressable>
+                ),
+              })}
+            />
+          </>
+        )}
       </Stack.Navigator>
       <HttpErrorModal
         isModalVisible={httpError}
