@@ -6,11 +6,6 @@ import { colors } from "../../../constants/colors";
 import TextBoldL from "../../../ui-components/texts/TextBoldL";
 import { AntDesign } from "@expo/vector-icons";
 import { ICON_SIZE } from "../../../constants/sizes";
-import {
-  useAddFavoriteMutation,
-  useGetAllFavoritesQuery,
-  useUpdateFavoritesMutation,
-} from "../../../store/api/favoritesApi";
 import { useSelector } from "react-redux";
 import {
   useGetUserByIdQuery,
@@ -18,8 +13,8 @@ import {
 } from "../../../store/api/userApi";
 
 export default function DetailsDescription({ name, price, description, id }) {
-  const userId = useSelector((state) => state.user.id);
-  const { data: user } = useGetUserByIdQuery(userId);
+  const { userId, token } = useSelector((state) => state.auth);
+  const { data: user } = useGetUserByIdQuery({ userId, token });
   const [updateUser] = useUpdateUserMutation();
   const isFavorite = user?.favoritesIds?.includes(id);
   const iconName = isFavorite ? "star" : "staro";
@@ -27,17 +22,20 @@ export default function DetailsDescription({ name, price, description, id }) {
   const toggleFavorite = () => {
     if (isFavorite) {
       updateUser({
-        id: userId,
+        userId,
+        token,
         favoritesIds: user.favoritesIds.filter((el) => el !== id),
       });
     } else if (user?.favoritesIds) {
       updateUser({
-        id: userId,
+        userId,
+        token,
         favoritesIds: [...user.favoritesIds, id],
       });
     } else {
       updateUser({
-        id: userId,
+        userId,
+        token,
         favoritesIds: [id],
       });
     }

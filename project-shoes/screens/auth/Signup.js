@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useCreateUserMutation } from "../../store/api/userApi";
 import AuthForm from "./components/AuthForm";
 import { useDispatch } from "react-redux";
-import { setUserId } from "../../store/slices/userSlice";
 import { useSignMutation } from "../../store/api/authApi";
-import { setToken } from "../../store/slices/authSlice";
+import { setToken, setUserId } from "../../store/slices/authSlice";
 
 export default function Signup({ navigation }) {
   const dispatch = useDispatch();

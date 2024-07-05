@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useGetUserQuery, useLazyGetUserQuery } from "../../store/api/userApi";
 import AuthForm from "./components/AuthForm";
 import { useDispatch } from "react-redux";
-import { setUserId } from "../../store/slices/userSlice";
 import { useSignMutation } from "../../store/api/authApi";
-import { setToken } from "../../store/slices/authSlice";
+import { setToken, setUserId } from "../../store/slices/authSlice";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
@@ -23,6 +22,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     if (data) {
       dispatch(setToken(data.idToken));
+      dispatch(setUserId(data.localId));
     }
   }, [data]);
 

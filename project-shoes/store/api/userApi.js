@@ -20,7 +20,7 @@ export const userApi = createApi({
       },
     }),
     getUserById: builder.query({
-      query: (id) => `users/${id}.json`,
+      query: ({ userId, token }) => `users/${userId}.json?auth=${token}`,
     }),
     createUser: builder.mutation({
       query: ({ user, token, id }) => ({
@@ -30,16 +30,23 @@ export const userApi = createApi({
       }),
     }),
     updateUser: builder.mutation({
-      query: ({ id, ...patch }) => ({
-        url: `users/${id}.json`,
+      query: ({ userId, token, ...patch }) => ({
+        url: `users/${userId}.json?auth=${token}`,
         method: "PATCH",
         body: patch,
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { userId, token, ...patch },
+        { dispatch, queryFulfilled }
+      ) {
         const patchResult = dispatch(
-          userApi.util.updateQueryData("getUserById", id, (existingUser) => {
-            Object.assign(existingUser, patch);
-          })
+          userApi.util.updateQueryData(
+            "getUserById",
+            { userId, token },
+            (existingUser) => {
+              Object.assign(existingUser, patch);
+            }
+          )
         );
         try {
           await queryFulfilled;

@@ -8,13 +8,14 @@ import { colors } from "../../constants/colors";
 import ProfileForm from "./components/ProfileForm";
 
 export default function Profile() {
-  const userId = useSelector((state) => state.user.id);
-  const { data: user, isLoading } = useGetUserByIdQuery(userId);
+  const { userId, token } = useSelector((state) => state.auth);
+  const { data: user, isLoading } = useGetUserByIdQuery({ userId, token });
   const [udpateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const updateUserProfile = (values) => {
     udpateUser({
-      id: userId,
+      userId,
+      token,
       ...values,
     });
   };

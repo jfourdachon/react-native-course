@@ -7,16 +7,15 @@ import Sizes from "./components/Sizes";
 import CustomButton from "../../ui-components/buttons/CustomButton";
 import { spaces } from "../../constants/spaces";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addShoesToCart } from "../../store/slices/cartSlice";
+import { useSelector } from "react-redux";
 import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "../../store/api/userApi";
 
 export default function Details({ route, navigation }) {
-  const userId = useSelector((state) => state.user.id);
-  const { data: user } = useGetUserByIdQuery(userId);
+  const { userId, token } = useSelector((state) => state.auth);
+  const { data: user } = useGetUserByIdQuery({ userId, token });
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const data = shoes
@@ -46,7 +45,8 @@ export default function Details({ route, navigation }) {
       ? user?.cart?.totalAmount + item.price
       : item.price;
     updateUser({
-      id: userId,
+      userId,
+      token,
       cart: {
         shoes,
         totalAmount,
