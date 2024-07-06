@@ -11,7 +11,6 @@ import { useGetUserByIdQuery } from "../../store/api/userApi";
 export default function Favorites({ navigation }) {
   const { userId, token } = useSelector((state) => state.auth);
   const { data: user, isLoading } = useGetUserByIdQuery({ userId, token });
-  console.log({ userId, user });
 
   const data = user?.favoritesIds?.map((id) =>
     shoes

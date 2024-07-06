@@ -20,6 +20,7 @@ import FavoriteIcon from "../assets/images/navigation/favorite.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserByIdQuery } from "../store/api/userApi";
 import { setToken } from "../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,7 @@ function CustomDrawerContent(props) {
 
   const logout = () => {
     dispatch(setToken());
+    SecureStore.deleteItemAsync("refreshToken");
   };
   return (
     <DrawerContentScrollView>

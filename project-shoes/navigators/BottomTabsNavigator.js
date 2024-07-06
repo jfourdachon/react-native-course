@@ -125,7 +125,7 @@ export default function BottomTabsNavigator() {
             tabBarBadgeStyle: {
               backgroundColor: colors.LIGHT,
               color: colors.BLUE,
-              marginTop: -insets.bottom,
+              marginTop: Platform.select({ ios: -30, android: 0 }),
             },
             tabBarIcon: ({ color }) => (
               <Pressable

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { colors } from "../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import Details from "../screens/details";
 import BottomTabsNavigator from "./BottomTabsNavigator";
 import DrawerNavigator from "./DrawerNavigator";
@@ -11,16 +11,53 @@ import Login from "../screens/auth/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { setHttpError } from "../store/slices/errorSlice";
 import HttpErrorModal from "../ui-components/modals/HttpErrorModal";
-
+import { useRefreshTokenMutation } from "../store/api/authApi";
+import { useEffect, useState } from "react";
+import * as SecureStore from "expo-secure-store";
+import { setToken, setUserId } from "../store/slices/authSlice";
 const Stack = createNativeStackNavigator();
 
 export default function MainStackNavigator() {
+  const [refreshTokenMutation, { data }] = useRefreshTokenMutation();
   const token = useSelector((state) => state.auth.token);
+  const [isLoading, setIsloading] = useState(!token);
   const httpError = useSelector((state) => state.error.httpError);
   const dispatch = useDispatch();
   const closeHttpErrorModal = () => {
     dispatch(setHttpError(false));
   };
+
+  const getAuthenticatedUser = async () => {
+    const refreshToken = await SecureStore.getItemAsync("refreshToken");
+    if (refreshToken) {
+      refreshTokenMutation(refreshToken);
+    } else {
+      setIsloading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!token) {
+      getAuthenticatedUser();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setToken(data.id_token));
+      dispatch(setUserId(data.user_id));
+      SecureStore.setItemAsync("refreshToken", data.refresh_token);
+      setIsloading(false);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator color={colors.BLUE} size="large" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -99,3 +136,12 @@ export default function MainStackNavigator() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.LIGHT,
+  },
+});
