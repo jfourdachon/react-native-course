@@ -17,8 +17,10 @@ import ProfileIcon from "../assets/images/navigation/user.svg";
 import CartIcon from "../assets/images/navigation/cart.svg";
 import NotificationsIcon from "../assets/images/navigation/notifications.svg";
 import FavoriteIcon from "../assets/images/navigation/favorite.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetUserByIdQuery } from "../store/api/userApi";
+import { setToken } from "../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
 const Drawer = createDrawerNavigator();
 
@@ -73,10 +75,16 @@ const Label = ({ shoesInCartCount, label, activeIndex, index }) => {
 };
 
 function CustomDrawerContent(props) {
-  const userId = useSelector((state) => state.user.id);
-  const { data: user } = useGetUserByIdQuery(userId);
+  const dispatch = useDispatch();
+  const { userId, token } = useSelector((state) => state.auth);
+  const { data: user } = useGetUserByIdQuery({ userId, token });
   const activeIndex = props.state.routes[0].state?.index || 0;
   const shoesInCartCount = user?.cart?.shoes?.length;
+
+  const logout = () => {
+    dispatch(setToken());
+    SecureStore.deleteItemAsync("refreshToken");
+  };
   return (
     <DrawerContentScrollView>
       <View style={styles.userInfosContainer}>
@@ -132,6 +140,7 @@ function CustomDrawerContent(props) {
         )}
         labelStyle={[styles.label, { color: colors.GREY }]}
         style={styles.logoutItem}
+        onPress={logout}
       />
     </DrawerContentScrollView>
   );

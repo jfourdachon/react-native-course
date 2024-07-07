@@ -1,31 +1,38 @@
 import { useEffect } from "react";
-import { useGetUserQuery, useLazyGetUserQuery } from "../../store/api/userApi";
 import AuthForm from "./components/AuthForm";
 import { useDispatch } from "react-redux";
-import { setUserId } from "../../store/slices/userSlice";
+import { useSignMutation } from "../../store/api/authApi";
+import { setToken, setUserId } from "../../store/slices/authSlice";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
-  const [getUser, { data, isFetching }] = useLazyGetUserQuery();
+  const [signIn, { data, isLoading }] = useSignMutation();
 
   const navigateToSignup = () => {
     navigation.replace("Signup");
   };
   const submitFormHandler = (values) => {
-    getUser({ email: values.email });
+    signIn({
+      email: values.email,
+      password: values.password,
+      endpoint: "signInWithPassword",
+    });
   };
   useEffect(() => {
-    if (data?.id) {
-      dispatch(setUserId(data.id));
-      navigation.replace("Drawer");
+    if (data) {
+      dispatch(setToken(data.idToken));
+      dispatch(setUserId(data.localId));
+      SecureStore.setItemAsync("refreshToken", data.refreshToken);
     }
   }, [data]);
+
   return (
     <AuthForm
       loginScreen
       navigate={navigateToSignup}
       submitFormHandler={submitFormHandler}
-      isLoading={isFetching}
+      isLoading={isLoading}
     />
   );
 }

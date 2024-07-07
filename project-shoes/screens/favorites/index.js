@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { colors } from "../../constants/colors";
 import { shoes } from "../../data/shoes";
 import VerticalCard from "../../ui-components/cards/VerticalCard";
@@ -12,13 +6,11 @@ import ListItemSeparator from "../../ui-components/separators/ListItemSeparator"
 import { spaces } from "../../constants/spaces";
 import { useSelector } from "react-redux";
 import TextBoldL from "../../ui-components/texts/TextBoldL";
-import { useGetAllFavoritesQuery } from "../../store/api/favoritesApi";
 import { useGetUserByIdQuery } from "../../store/api/userApi";
 
 export default function Favorites({ navigation }) {
-  const userId = useSelector((state) => state.user.id);
-  const { data: user, isLoading } = useGetUserByIdQuery(userId);
-  console.log({ userId, user });
+  const { userId, token } = useSelector((state) => state.auth);
+  const { data: user, isLoading } = useGetUserByIdQuery({ userId, token });
 
   const data = user?.favoritesIds?.map((id) =>
     shoes
