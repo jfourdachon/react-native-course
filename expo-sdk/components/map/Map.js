@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { StyleSheet } from "react-native";
+import { Linking, StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MarkerItem from "./MarkerItem";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 
 export default function Map() {
+  const [missingPermissions, setMissingPermissions] = useState({
+    isPermissionModalVisible: false,
+    permissions: [],
+  });
   const mapRef = useRef();
   const [libraryStatus, requestLibraryPermission] =
     ImagePicker.useMediaLibraryPermissions();
@@ -16,6 +20,12 @@ export default function Map() {
     let status = locationStatus;
     if (!status?.granted) {
       status = await requestLocationPermission();
+    }
+    if (!status.granted) {
+      setMissingPermissions({
+        isPermissionModalVisible: true,
+        permissions: ["Votre localisation"],
+      });
     }
     if (status?.granted) {
       const position = await Location.getCurrentPositionAsync();
@@ -53,9 +63,14 @@ export default function Map() {
   const addMarker = async (event) => {
     event.persist();
     let status = libraryStatus;
-
     if (!status?.granted) {
       status = await requestLibraryPermission();
+    }
+    if (!status.granted && !status.canAskAgain) {
+      setMissingPermissions({
+        isPermissionModalVisible: true,
+        permissions: ["Vos photos"],
+      });
     }
     if (status?.granted) {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -84,6 +99,16 @@ export default function Map() {
     markersCopy[index].isDragging = false;
     setMarkers(markersCopy);
   };
+
+  const openSettings = () => {
+    Linking.openSettings();
+    closePermissinModal();
+  };
+
+  const closePermissinModal = () => {
+    setMissingPermissions({ isPermissionModalVisible: false, permissions: [] });
+  };
+
   return (
     <MapView
       ref={mapRef}
@@ -117,5 +142,15 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  btnsContainer: {
+    position: "absolute",
+    bottom: 30,
+    left: 40,
+    right: 40,
+    height: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });
