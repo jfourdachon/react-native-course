@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Linking, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MarkerItem from "./MarkerItem";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
+import LocationButton from "./LocationButton";
+import PictureButton from "../picture/PictureButton";
 
 export default function Map() {
-  const [missingPermissions, setMissingPermissions] = useState({
-    isPermissionModalVisible: false,
-    permissions: [],
-  });
   const mapRef = useRef();
   const [libraryStatus, requestLibraryPermission] =
     ImagePicker.useMediaLibraryPermissions();
@@ -20,12 +18,6 @@ export default function Map() {
     let status = locationStatus;
     if (!status?.granted) {
       status = await requestLocationPermission();
-    }
-    if (!status.granted) {
-      setMissingPermissions({
-        isPermissionModalVisible: true,
-        permissions: ["Votre localisation"],
-      });
     }
     if (status?.granted) {
       const position = await Location.getCurrentPositionAsync();
@@ -66,12 +58,6 @@ export default function Map() {
     if (!status?.granted) {
       status = await requestLibraryPermission();
     }
-    if (!status.granted && !status.canAskAgain) {
-      setMissingPermissions({
-        isPermissionModalVisible: true,
-        permissions: ["Vos photos"],
-      });
-    }
     if (status?.granted) {
       const result = await ImagePicker.launchImageLibraryAsync({
         quality: 0.5,
@@ -100,41 +86,39 @@ export default function Map() {
     setMarkers(markersCopy);
   };
 
-  const openSettings = () => {
-    Linking.openSettings();
-    closePermissinModal();
-  };
-
-  const closePermissinModal = () => {
-    setMissingPermissions({ isPermissionModalVisible: false, permissions: [] });
-  };
-
   return (
-    <MapView
-      ref={mapRef}
-      showsUserLocation
-      style={styles.map}
-      initialRegion={initialRegion}
-      zoomControlEnabled
-      onPress={addMarker}
-    >
-      {markers.map((marker, index) => (
-        <Marker
-          key={index}
-          coordinate={marker.coordinate}
-          draggable
-          isPreselected
-          stopPropagation
-          onDragStart={dragStartHandler(index)}
-          onDragEnd={dragEndHandler(index)}
-        >
-          <MarkerItem
-            isDragging={marker.isDragging}
-            imageSource={marker.imageSource}
-          />
-        </Marker>
-      ))}
-    </MapView>
+    <>
+      <MapView
+        ref={mapRef}
+        showsUserLocation
+        style={styles.map}
+        initialRegion={initialRegion}
+        zoomControlEnabled
+        onPress={addMarker}
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker.coordinate}
+            draggable
+            isPreselected
+            stopPropagation
+            onDragStart={dragStartHandler(index)}
+            onDragEnd={dragEndHandler(index)}
+          >
+            <MarkerItem
+              isDragging={marker.isDragging}
+              imageSource={marker.imageSource}
+            />
+          </Marker>
+        ))}
+      </MapView>
+      <View style={styles.btnsContainer}>
+        <LocationButton onPress={getUserLocation} />
+        <PictureButton setMarkers={setMarkers} />
+        <View style={{ width: 60 }} />
+      </View>
+    </>
   );
 }
 
@@ -150,7 +134,6 @@ const styles = StyleSheet.create({
     right: 40,
     height: 60,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
   },
 });
