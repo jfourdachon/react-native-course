@@ -13,14 +13,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.expo-sdk"
+      "requireFullScreen": true
     },
     "android": {
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyAE7MGm_6pLR6gTPJSjS28wI2BfPLDf5WA"
-        }
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -48,6 +43,12 @@
         "expo-media-library",
         {
           "savePhotosPermission": "Autoriser l'application à sauvegarder des photos dans la galerie"
+        }
+      ],
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "PORTRAIT_UP"
         }
       ]
     ]

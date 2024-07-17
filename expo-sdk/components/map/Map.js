@@ -6,8 +6,16 @@ import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import LocationButton from "./LocationButton";
 import PictureButton from "../picture/PictureButton";
+import PermissionsModal from "../permissions/PermissionsModal";
+import FullPicture from "../picture/FullPicture";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 export default function Map() {
+  const [selectedPicture, setSelectedPicture] = useState({
+    index: undefined,
+    uri: undefined,
+  });
+  const [missingPermissions, setMissingPermissions] = useState([]);
   const mapRef = useRef();
   const [libraryStatus, requestLibraryPermission] =
     ImagePicker.useMediaLibraryPermissions();
@@ -30,6 +38,8 @@ export default function Map() {
         },
         2000
       );
+    } else {
+      setMissingPermissions(["Votre localisation"]);
     }
   };
 
@@ -73,6 +83,8 @@ export default function Map() {
           },
         ]);
       }
+    } else {
+      setMissingPermissions(["Votre galerie d'images"]);
     }
   };
   const dragStartHandler = (index) => () => {
@@ -84,6 +96,27 @@ export default function Map() {
     const markersCopy = [...markers];
     markersCopy[index].isDragging = false;
     setMarkers(markersCopy);
+  };
+
+  const closePermissionsModal = () => {
+    setMissingPermissions([]);
+  };
+
+  const displayFullPicture = (index) => () => {
+    setSelectedPicture({ index, uri: markers[index].imageSource });
+    ScreenOrientation.unlockAsync();
+  };
+
+  const closeFullPictureModal = () => {
+    setSelectedPicture({ index: undefined, uri: undefined });
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+  };
+
+  const deleteMareker = (index) => () => {
+    const markersCopy = [...markers];
+    markersCopy.splice(index, 1);
+    setMarkers(markersCopy);
+    closeFullPictureModal();
   };
 
   return (
@@ -105,6 +138,7 @@ export default function Map() {
             stopPropagation
             onDragStart={dragStartHandler(index)}
             onDragEnd={dragEndHandler(index)}
+            onPress={displayFullPicture(index)}
           >
             <MarkerItem
               isDragging={marker.isDragging}
@@ -115,9 +149,23 @@ export default function Map() {
       </MapView>
       <View style={styles.btnsContainer}>
         <LocationButton onPress={getUserLocation} />
-        <PictureButton setMarkers={setMarkers} />
+        <PictureButton
+          setMarkers={setMarkers}
+          setMissingPermissions={setMissingPermissions}
+        />
         <View style={{ width: 60 }} />
       </View>
+      <PermissionsModal
+        closeModal={closePermissionsModal}
+        permissions={missingPermissions}
+        isVisible={missingPermissions.length > 0}
+      />
+      <FullPicture
+        isVisible={!!selectedPicture.index}
+        closeModal={closeFullPictureModal}
+        imageSource={selectedPicture.uri}
+        deleteMarker={deleteMareker(selectedPicture.index)}
+      />
     </>
   );
 }

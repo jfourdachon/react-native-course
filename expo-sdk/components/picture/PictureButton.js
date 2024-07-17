@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 
-export default function PictureButton({ setMarkers }) {
+export default function PictureButton({ setMarkers, setMissingPermissions }) {
   const [locationStatus, requestLocationPermission] =
     Location.useForegroundPermissions();
   const [cameraStatus, requestCameraPermission] =
@@ -17,15 +17,25 @@ export default function PictureButton({ setMarkers }) {
     let locStatus = locationStatus;
     let camStatus = cameraStatus;
     let libStatus = libraryStatus;
+    const permissions = [];
 
     if (!locStatus?.granted) {
       locStatus = await requestLocationPermission();
+      if (!locStatus.granted) {
+        permissions.push("Votre localisation");
+      }
     }
-    if (locStatus.granted && !camStatus?.granted) {
+    if (!camStatus?.granted) {
       camStatus = await requestCameraPermission();
+      if (!camStatus.granted) {
+        permissions.push("Votre appareil photo");
+      }
     }
-    if (locStatus.granted && camStatus.granted && !libStatus?.granted) {
+    if (!libStatus?.granted) {
       libStatus = await requestLibraryPermission();
+      if (!libStatus.granted) {
+        permissions.push("Votre galerie d'images");
+      }
     }
 
     if (locStatus.granted && camStatus.granted && libStatus.granted) {
@@ -45,6 +55,8 @@ export default function PictureButton({ setMarkers }) {
         ]);
         MediaLibrary.saveToLibraryAsync(picture.assets[0].uri);
       }
+    } else {
+      setMissingPermissions(permissions);
     }
   };
 
