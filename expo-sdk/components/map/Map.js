@@ -9,10 +9,16 @@ import PictureButton from "../picture/PictureButton";
 import PermissionsModal from "../permissions/PermissionsModal";
 import FullPicture from "../picture/FullPicture";
 import * as ScreenOrientation from "expo-screen-orientation";
+import {
+  getAllMarkers,
+  insertMarker,
+  removeMarker,
+  updateMarkerCoordinate,
+} from "../../utils/database";
 
-export default function Map() {
+export default function Map({ isDbInitialized }) {
   const [selectedPicture, setSelectedPicture] = useState({
-    index: undefined,
+    id: undefined,
     uri: undefined,
   });
   const [missingPermissions, setMissingPermissions] = useState([]);
@@ -53,14 +59,7 @@ export default function Map() {
     latitudeDelta: 10,
     longitudeDelta: 2,
   };
-  const [markers, setMarkers] = useState([
-    {
-      coordinate: { latitude: 43.8765, longitude: 2.712 },
-      isDragging: false,
-      imageSource:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUqNqnr8-J5enuQU81PuPhc_qIMSi9cIDXlQ&s",
-    },
-  ]);
+  const [markers, setMarkers] = useState([]);
 
   const addMarker = async (event) => {
     event.persist();
@@ -74,9 +73,14 @@ export default function Map() {
       });
       if (!result.canceled) {
         const { coordinate } = event.nativeEvent;
+        const newMarkerId = await insertMarker({
+          coordinate,
+          imageSource: result.assets[0].uri,
+        });
         setMarkers((current) => [
           ...current,
           {
+            id: newMarkerId,
             coordinate,
             isDragging: false,
             imageSource: result.assets[0].uri,
@@ -87,14 +91,16 @@ export default function Map() {
       setMissingPermissions(["Votre galerie d'images"]);
     }
   };
-  const dragStartHandler = (index) => () => {
+  const dragStartHandler = (id) => () => {
     const markersCopy = [...markers];
-    markersCopy[index].isDragging = true;
+    markersCopy.find((el) => el.id === id).isDragging = true;
     setMarkers(markersCopy);
   };
-  const dragEndHandler = (index) => () => {
+  const dragEndHandler = (id) => (event) => {
+    updateMarkerCoordinate({ id, coordinate: event.nativeEvent.coordinate });
+
     const markersCopy = [...markers];
-    markersCopy[index].isDragging = false;
+    markersCopy.find((el) => el.id === id).isDragging = false;
     setMarkers(markersCopy);
   };
 
@@ -102,8 +108,8 @@ export default function Map() {
     setMissingPermissions([]);
   };
 
-  const displayFullPicture = (index) => () => {
-    setSelectedPicture({ index, uri: markers[index].imageSource });
+  const displayFullPicture = (id, imageSource) => () => {
+    setSelectedPicture({ id, uri: imageSource });
     ScreenOrientation.unlockAsync();
   };
 
@@ -112,12 +118,32 @@ export default function Map() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   };
 
-  const deleteMareker = (index) => () => {
-    const markersCopy = [...markers];
-    markersCopy.splice(index, 1);
+  const deleteMareker = (id) => () => {
+    removeMarker({ id });
+    const markersCopy = markers.filter((el) => el.id !== id);
     setMarkers(markersCopy);
     closeFullPictureModal();
   };
+
+  useEffect(() => {
+    if (isDbInitialized) {
+      getAllMarkers().then((res) => {
+        setMarkers(
+          res.map((marker) => {
+            return {
+              id: marker.id,
+              coordinate: {
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              },
+              imageSource: marker.imageSource,
+              isDragging: false,
+            };
+          })
+        );
+      });
+    }
+  }, [isDbInitialized]);
 
   return (
     <>
@@ -129,16 +155,16 @@ export default function Map() {
         zoomControlEnabled
         onPress={addMarker}
       >
-        {markers.map((marker, index) => (
+        {markers?.map((marker) => (
           <Marker
-            key={index}
+            key={marker.id}
             coordinate={marker.coordinate}
             draggable
             isPreselected
             stopPropagation
-            onDragStart={dragStartHandler(index)}
-            onDragEnd={dragEndHandler(index)}
-            onPress={displayFullPicture(index)}
+            onDragStart={dragStartHandler(marker.id)}
+            onDragEnd={dragEndHandler(marker.id)}
+            onPress={displayFullPicture(marker.id, marker.imageSource)}
           >
             <MarkerItem
               isDragging={marker.isDragging}
@@ -161,10 +187,10 @@ export default function Map() {
         isVisible={missingPermissions.length > 0}
       />
       <FullPicture
-        isVisible={!!selectedPicture.index}
+        isVisible={!!selectedPicture.id}
         closeModal={closeFullPictureModal}
         imageSource={selectedPicture.uri}
-        deleteMarker={deleteMareker(selectedPicture.index)}
+        deleteMarker={deleteMareker(selectedPicture.id)}
       />
     </>
   );
