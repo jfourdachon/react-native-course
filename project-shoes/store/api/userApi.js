@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./baseQueryWithReauth";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 export const userApi = createApi({
   reducerPath: "useApi",
@@ -58,6 +64,26 @@ export const userApi = createApi({
         }
       },
     }),
+    uploadUserPicture: builder.mutation({
+      queryFn: async ({ uri, userId }) => {
+        try {
+          const storage = getStorage();
+          const imageRef = ref(storage, "images/" + userId + ".jpg");
+          const response = await fetch(uri);
+          const blobFile = await response.blob();
+          const data = await uploadBytesResumable(imageRef, blobFile);
+          const url = await getDownloadURL(data.ref);
+
+          return {
+            data: url,
+          };
+        } catch (error) {
+          return {
+            error,
+          };
+        }
+      },
+    }),
   }),
 });
 
@@ -67,4 +93,5 @@ export const {
   useGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
+  useUploadUserPictureMutation,
 } = userApi;

@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetUserByIdQuery } from "../store/api/userApi";
 import { setToken } from "../store/slices/authSlice";
 import * as SecureStore from "expo-secure-store";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const Drawer = createDrawerNavigator();
 
@@ -88,13 +89,19 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView>
       <View style={styles.userInfosContainer}>
-        <Image
-          source={{
-            uri: "https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80",
-          }}
-          style={styles.image}
-        />
-        <TextBoldXL style={styles.text}>John Doe</TextBoldXL>
+        <View style={styles.imageContainer}>
+          {user?.photoUrl ? (
+            <Image
+              source={{
+                uri: user.photoUrl,
+              }}
+              style={styles.image}
+            />
+          ) : (
+            <FontAwesome name="user-circle" size={90} color={colors.BLUE} />
+          )}
+        </View>
+        <TextBoldXL style={styles.text}>{user?.fullName}</TextBoldXL>
       </View>
       {/* <DrawerItemList {...props} /> */}
       {routes.map((route) => (
@@ -150,6 +157,10 @@ const styles = StyleSheet.create({
   userInfosContainer: {
     marginLeft: spaces.L,
     marginVertical: spaces.XL,
+  },
+  imageContainer: {
+    width: 90,
+    height: 90,
   },
   image: {
     width: 90,

@@ -5,8 +5,15 @@ import { spaces } from "../../../constants/spaces";
 import { colors } from "../../../constants/colors";
 import Input from "../../../ui-components/inputs/Input";
 import CustomButton from "../../../ui-components/buttons/CustomButton";
+import ProfilePicture from "./ProfilePicture";
 
-export default function ProfileForm({ user, submitFormHandler, isLoading }) {
+export default function ProfileForm({
+  user,
+  submitFormHandler,
+  isLoading,
+  image,
+  setImage,
+}) {
   const initialValues = {
     email: user.email,
     fullName: user.fullName,
@@ -35,6 +42,7 @@ export default function ProfileForm({ user, submitFormHandler, isLoading }) {
         contentContainerStyle={styles.formContainer}
         showsVerticalScrollIndicator={false}
       >
+        <ProfilePicture image={image} setImage={setImage} />
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
