@@ -3,7 +3,6 @@ import { colors } from "../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import Details from "../screens/details";
-import BottomTabsNavigator from "./BottomTabsNavigator";
 import DrawerNavigator from "./DrawerNavigator";
 import Cart from "../screens/cart";
 import Signup from "../screens/auth/Signup";
@@ -15,9 +14,11 @@ import { useRefreshTokenMutation } from "../store/api/authApi";
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { setToken, setUserId } from "../store/slices/authSlice";
+import SplashScreen from "../screens/splashScreen";
 const Stack = createNativeStackNavigator();
 
 export default function MainStackNavigator() {
+  const [isAppReady, setIsAppReady] = useState(false);
   const [refreshTokenMutation, { data }] = useRefreshTokenMutation();
   const token = useSelector((state) => state.auth.token);
   const [isLoading, setIsloading] = useState(!token);
@@ -51,12 +52,12 @@ export default function MainStackNavigator() {
     }
   }, [data]);
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator color={colors.BLUE} size="large" />
-      </View>
-    );
+  const appReadyHandler = () => {
+    setIsAppReady(true);
+  };
+
+  if (!isAppReady) {
+    return <SplashScreen appReadyHandler={appReadyHandler} />;
   }
 
   return (

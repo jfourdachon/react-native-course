@@ -9,8 +9,14 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import MainStackNavigator from "./navigators/MainStackNavigator";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { getApps, initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebaseConfig";
 
 export default function App() {
+  const apps = getApps();
+  if (apps.length === 0) {
+    initializeApp(firebaseConfig);
+  }
   const [fontsLoaded] = useFonts({
     Light: require("./assets/fonts/Montserrat-Light.ttf"),
     Regular: require("./assets/fonts/Montserrat-Regular.ttf"),
