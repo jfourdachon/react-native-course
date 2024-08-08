@@ -13,11 +13,40 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "../../store/api/userApi";
+import { useFetchPulishableKeyQuery } from "../../store/api/stripe";
+import { useEffect, useState } from "react";
+import { initStripe } from "@stripe/stripe-react-native";
+import PaymentButton from "./components/PaymentButton";
+import PaymentSuccess from "./components/PaymentSuccess";
 
 export default function Cart() {
+  const [isPaymentDone, setIsPaymentDone] = useState(false);
   const { userId, token } = useSelector((state) => state.auth);
   const { data: user } = useGetUserByIdQuery({ userId, token });
   const [updateUser] = useUpdateUserMutation();
+  const [isStripeInitialized, setIsStripeInitialiazed] = useState(false);
+
+  const { data, isLoading } = useFetchPulishableKeyQuery();
+
+  useEffect(() => {
+    if (data?.publishableKey) {
+      initStripe({ publishableKey: data.publishableKey }).then(() =>
+        setIsStripeInitialiazed(true)
+      );
+    }
+  }, [data]);
+
+  const resetCart = () => {
+    setIsPaymentDone(false);
+    updateUser({
+      userId,
+      token,
+      cart: {
+        shoes: [],
+        totalAmount: 0,
+      },
+    });
+  };
 
   const totalAmount = user?.cart?.totalAmount;
 
@@ -96,8 +125,12 @@ export default function Cart() {
             {totalAmount + Math.floor(totalAmount / 15)} €
           </TextBoldXL>
         </View>
-        <CustomButton text="Passer la commande" />
+        <PaymentButton
+          isReady={isStripeInitialized}
+          setIsPaymentDone={setIsPaymentDone}
+        />
       </View>
+      {isPaymentDone ? <PaymentSuccess onPress={resetCart} /> : null}
     </View>
   );
 }

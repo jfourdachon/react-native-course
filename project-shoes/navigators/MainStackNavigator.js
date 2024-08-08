@@ -15,13 +15,14 @@ import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { setToken, setUserId } from "../store/slices/authSlice";
 import SplashScreen from "../screens/splashScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function MainStackNavigator() {
-  const [isAppReady, setIsAppReady] = useState(false);
   const [refreshTokenMutation, { data }] = useRefreshTokenMutation();
   const token = useSelector((state) => state.auth.token);
   const [isLoading, setIsloading] = useState(!token);
+  const [isAppReady, setIsAppReady] = useState(false);
   const httpError = useSelector((state) => state.error.httpError);
   const dispatch = useDispatch();
   const closeHttpErrorModal = () => {
@@ -58,6 +59,14 @@ export default function MainStackNavigator() {
 
   if (!isAppReady) {
     return <SplashScreen appReadyHandler={appReadyHandler} />;
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator color={colors.BLUE} size="large" />
+      </View>
+    );
   }
 
   return (
