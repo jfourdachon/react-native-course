@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { getApps, initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebaseConfig";
+import { linkingConfig } from "./utils/linking";
 
 export default function App() {
   const apps = getApps();
@@ -26,7 +27,7 @@ export default function App() {
   return fontsLoaded ? (
     <Provider store={store}>
       <SafeAreaProvider>
-        <NavigationContainer>
+        <NavigationContainer linking={linkingConfig}>
           <MainStackNavigator />
         </NavigationContainer>
       </SafeAreaProvider>
