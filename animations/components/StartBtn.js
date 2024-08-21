@@ -36,13 +36,11 @@ export default function StartBtn({ startGame }) {
         Animated.timing(animatedScale, {
           toValue: 5,
           duration: 3000,
-          delay: 1000,
           useNativeDriver: true,
         }),
         Animated.timing(animatedOpacity, {
           toValue: 0,
           duration: 3000,
-          delay: 1000,
           useNativeDriver: true,
         }),
       ])
