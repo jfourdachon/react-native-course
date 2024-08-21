@@ -31,7 +31,7 @@ export default function Card({
   const animatedTop = useRef(
     new Animated.Value(SCREEN_HEIGHT / 2 - CARD_HEIGHT / 2)
   ).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
+  const animatedRotation = useRef(new Animated.Value(0)).current;
   const animatedOpacity = useRef(new Animated.Value(1)).current;
 
   const distribute = () => {
@@ -75,13 +75,13 @@ export default function Card({
         useNativeDriver: true,
       }).start();
     } else if (isFlipped) {
-      Animated.timing(rotateAnim, {
+      Animated.timing(animatedRotation, {
         toValue: 1,
         duration: 500,
         useNativeDriver: true,
       }).start();
     } else {
-      Animated.timing(rotateAnim, {
+      Animated.timing(animatedRotation, {
         toValue: 0,
         duration: 500,
         useNativeDriver: true,
@@ -93,12 +93,12 @@ export default function Card({
     if (!isCleared && !isFlipped) onPressCard(card);
   };
 
-  const spin = rotateAnim.interpolate({
+  const spin = animatedRotation.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "180deg"],
   });
 
-  const reversedSpin = rotateAnim.interpolate({
+  const reversedSpin = animatedRotation.interpolate({
     inputRange: [0, 1],
     outputRange: ["180deg", "0deg"],
   });
@@ -120,23 +120,23 @@ export default function Card({
         <Animated.View
           style={[
             styles.card,
+            styles.frontCard,
+            { transform: [{ rotateY: reversedSpin }, { perspective: 1000 }] },
+          ]}
+        >
+          <Image source={card.source} style={styles.image} />
+        </Animated.View>
+        <Animated.View
+          style={[
+            styles.card,
             styles.backCard,
             { transform: [{ rotateY: spin }, { perspective: 1000 }] },
           ]}
         >
           <Image
-            style={styles.image}
             source={require("../assets/pokeball.png")}
+            style={styles.image}
           />
-        </Animated.View>
-        <Animated.View
-          style={[
-            styles.card,
-            styles.frontCard,
-            { transform: [{ rotateY: reversedSpin }, { perspective: 1000 }] },
-          ]}
-        >
-          <Image style={styles.image} source={card.source} />
         </Animated.View>
       </Pressable>
     </Animated.View>
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
     backgroundColor: "powderblue",
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     resizeMode: "contain",
   },
 });

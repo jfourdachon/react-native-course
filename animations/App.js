@@ -6,10 +6,8 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [shouldDistribute, setShouldDistribute] = useState(false);
-
   const [openCards, setOpenCards] = useState([]);
   const [clearedCards, setClearedCards] = useState([]);
-  // const [isCompleted, setIsCompleted] = useState(false);
 
   const evaluate = () => {
     if (openCards[0].type === openCards[1].type) {
@@ -21,11 +19,7 @@ export default function App() {
   };
 
   const handleCardPress = (card) => {
-    if (openCards.length === 1) {
-      setOpenCards((prev) => [...prev, card]);
-    } else {
-      setOpenCards([card]);
-    }
+    setOpenCards((prev) => [...prev, card]);
   };
 
   useEffect(() => {
@@ -48,7 +42,7 @@ export default function App() {
             shouldDistribute={shouldDistribute}
             card={card}
             onPressCard={handleCardPress}
-            isFlipped={!!openCards?.find((el) => el.id === card.id)}
+            isFlipped={!!openCards.find((el) => el.id === card.id)}
             isCleared={clearedCards.includes(card.type)}
           />
         ))}
