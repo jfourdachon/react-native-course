@@ -24,6 +24,8 @@ export default function Card({
   onPressCard,
   isFlipped,
   isCleared,
+  shouldRestart,
+  setShouldRestart,
 }) {
   const animatedLeft = useRef(
     new Animated.Value(SCREEN_WIDTH / 2 - CARD_WIDTH / 2)
@@ -60,12 +62,26 @@ export default function Card({
         delay: index * 100,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]).start(() => setShouldRestart(false));
   };
 
   useEffect(() => {
     if (shouldDistribute) distribute();
   }, [shouldDistribute]);
+
+  const initPosition = () => {
+    animatedLeft.setValue(-SCREEN_WIDTH / 2);
+    animatedTop.setValue(SCREEN_HEIGHT / 2 - CARD_HEIGHT / 2);
+    animatedOpacity.setValue(1);
+    animatedRotation.setValue(0);
+    distribute();
+  };
+
+  useEffect(() => {
+    if (shouldRestart) {
+      initPosition();
+    }
+  }, [shouldRestart]);
 
   useEffect(() => {
     if (isCleared) {
