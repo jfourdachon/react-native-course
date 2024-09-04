@@ -25,6 +25,7 @@ export default function HomeStackNavigator() {
         component={HomeScreen}
         name="Home"
         options={({ navigation }) => ({
+          headerShown: false,
           title: "Shoes",
           headerLeft: () => (
             <Pressable
