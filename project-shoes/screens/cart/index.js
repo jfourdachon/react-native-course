@@ -3,30 +3,36 @@ import { useSelector } from "react-redux";
 import ItemSeparator from "../../ui-components/separators/ListItemSeparator";
 import { spaces } from "../../constants/spaces";
 import { colors } from "../../constants/colors";
-import ListItem from "./components/ListItem";
+import ListItem, { SkeletonProps } from "./components/ListItem";
 import TextBoldL from "../../ui-components/texts/TextBoldL";
 import TextBoldXL from "../../ui-components/texts/TextBoldXL";
 import { radius } from "../../constants/radius";
-import CustomButton from "../../ui-components/buttons/CustomButton";
 import { IS_LARGE_SCREEN } from "../../constants/sizes";
 import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "../../store/api/userApi";
 import { useFetchPulishableKeyQuery } from "../../store/api/stripe";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { initStripe } from "@stripe/stripe-react-native";
 import PaymentButton from "./components/PaymentButton";
 import PaymentSuccess from "./components/PaymentSuccess";
+import { Skeleton } from "moti/skeleton";
 
 export default function Cart() {
+  const placeholderList = useMemo(() => {
+    return Array.from({ length: 3 }).map((_, i) => {
+      return { id: i.toString() };
+    });
+  }, []);
+
   const [isPaymentDone, setIsPaymentDone] = useState(false);
   const { userId, token } = useSelector((state) => state.auth);
-  const { data: user } = useGetUserByIdQuery({ userId, token });
+  const { data: user, isLoading } = useGetUserByIdQuery({ userId, token });
   const [updateUser] = useUpdateUserMutation();
   const [isStripeInitialized, setIsStripeInitialiazed] = useState(false);
 
-  const { data, isLoading } = useFetchPulishableKeyQuery();
+  const { data } = useFetchPulishableKeyQuery();
 
   useEffect(() => {
     if (data?.publishableKey) {
@@ -83,7 +89,7 @@ export default function Cart() {
     });
   };
 
-  if (!user?.cart?.shoes?.length) {
+  if (!user?.cart?.shoes?.length && !isLoading) {
     return (
       <View style={styles.listEmptyContainer}>
         <TextBoldL>Votre panier est vide</TextBoldL>
@@ -94,7 +100,7 @@ export default function Cart() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={user?.cart?.shoes}
+        data={!isLoading ? user?.cart?.shoes : placeholderList}
         showsVerticalScrollIndicator={false}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => (
@@ -102,6 +108,7 @@ export default function Cart() {
             item={item}
             removeShoesFromCart={removeShoesFromCart}
             updateQuantity={updateQuantity}
+            isLoading={isLoading}
           />
         )}
         style={styles.listContainer}
@@ -109,26 +116,34 @@ export default function Cart() {
         numColumns={IS_LARGE_SCREEN ? 2 : 1}
       />
       <View style={styles.priceContainer}>
-        <View style={styles.rowContainer}>
-          <TextBoldXL>Sous total</TextBoldXL>
-          <TextBoldXL>{totalAmount} €</TextBoldXL>
-        </View>
-        <View style={styles.rowContainer}>
-          <TextBoldXL>Frais de port</TextBoldXL>
-          <TextBoldXL>{Math.floor(totalAmount / 15)} €</TextBoldXL>
-        </View>
+        <Skeleton.Group show={isLoading}>
+          <View style={styles.rowContainer}>
+            <TextBoldXL>Sous total</TextBoldXL>
+            <Skeleton {...SkeletonProps}>
+              <TextBoldXL>{totalAmount} €</TextBoldXL>
+            </Skeleton>
+          </View>
+          <View style={styles.rowContainer}>
+            <TextBoldXL>Frais de port</TextBoldXL>
+            <Skeleton {...SkeletonProps}>
+              <TextBoldXL>{Math.floor(totalAmount / 15)} €</TextBoldXL>
+            </Skeleton>
+          </View>
 
-        <View style={styles.dashedLine} />
-        <View style={styles.rowContainer}>
-          <TextBoldXL>Total</TextBoldXL>
-          <TextBoldXL>
-            {totalAmount + Math.floor(totalAmount / 15)} €
-          </TextBoldXL>
-        </View>
-        <PaymentButton
-          isReady={isStripeInitialized}
-          setIsPaymentDone={setIsPaymentDone}
-        />
+          <View style={styles.dashedLine} />
+          <View style={styles.rowContainer}>
+            <TextBoldXL>Total</TextBoldXL>
+            <Skeleton {...SkeletonProps}>
+              <TextBoldXL>
+                {totalAmount + Math.floor(totalAmount / 15)} €
+              </TextBoldXL>
+            </Skeleton>
+          </View>
+          <PaymentButton
+            isReady={isStripeInitialized}
+            setIsPaymentDone={setIsPaymentDone}
+          />
+        </Skeleton.Group>
       </View>
       {isPaymentDone ? <PaymentSuccess onPress={resetCart} /> : null}
     </View>

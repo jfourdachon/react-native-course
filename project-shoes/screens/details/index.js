@@ -12,8 +12,10 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
 } from "../../store/api/userApi";
+import AnimatedHeader from "./components/AnimatedHeader";
 
 export default function Details({ route, navigation }) {
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const { userId, token } = useSelector((state) => state.auth);
   const { data: user } = useGetUserByIdQuery({ userId, token });
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
@@ -32,6 +34,7 @@ export default function Details({ route, navigation }) {
   const [sizes, setSizes] = useState(data.items[0].sizes);
 
   const addToCart = () => {
+    setShouldAnimate(true);
     const item = {
       id: data.id + Date.now(),
       name: brand.charAt(0).toUpperCase() + brand.slice(1) + " " + data.name,
@@ -69,6 +72,11 @@ export default function Details({ route, navigation }) {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <AnimatedHeader
+        shouldAnimate={shouldAnimate}
+        setShouldAnimate={setShouldAnimate}
+        cartCount={user?.cart?.shoes.length ?? 0}
+      />
       <View style={styles.container}>
         <DetailsImage source={selectedImage} />
         <DetailsDescription

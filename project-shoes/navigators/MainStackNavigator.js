@@ -15,10 +15,14 @@ import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { setToken, setUserId } from "../store/slices/authSlice";
 import SplashScreen from "../screens/splashScreen";
+import List from "../screens/list";
+import NewsList from "../screens/newsList";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
 export default function MainStackNavigator() {
+  const insets = useSafeAreaInsets();
   const [refreshTokenMutation, { data }] = useRefreshTokenMutation();
   const token = useSelector((state) => state.auth.token);
   const [isLoading, setIsloading] = useState(!token);
@@ -104,10 +108,8 @@ export default function MainStackNavigator() {
                 headerShown: false,
               }}
             />
-            <Stack.Screen
-              component={Details}
-              name="Details"
-              options={({ navigation }) => ({
+            <Stack.Group
+              screenOptions={({ navigation }) => ({
                 headerLeft: () => (
                   <Pressable onPress={() => navigation.goBack()}>
                     <Ionicons
@@ -118,24 +120,34 @@ export default function MainStackNavigator() {
                   </Pressable>
                 ),
               })}
-            />
-            <Stack.Screen
-              component={Cart}
-              name="MainCart"
-              options={({ navigation }) => ({
-                title: "Mon Panier",
-                animation: "slide_from_bottom",
-                headerLeft: () => (
-                  <Pressable onPress={() => navigation.goBack()}>
-                    <Ionicons
-                      name="chevron-back"
-                      size={24}
-                      color={colors.DARK}
-                    />
-                  </Pressable>
-                ),
-              })}
-            />
+            >
+              <Stack.Screen component={Details} name="Details" />
+              <Stack.Screen
+                component={Cart}
+                name="MainCart"
+                options={({ navigation }) => ({
+                  title: "Mon Panier",
+                  animation: "slide_from_bottom",
+                })}
+              />
+              <Stack.Group
+                screenOptions={{
+                  contentStyle: {
+                    backgroundColor: colors.LIGHT,
+                    paddingBottom: insets.bottom,
+                  },
+                }}
+              >
+                <Stack.Screen component={List} name="List" />
+                <Stack.Screen
+                  component={NewsList}
+                  name="NewsList"
+                  options={{
+                    title: "Nouveautés",
+                  }}
+                />
+              </Stack.Group>
+            </Stack.Group>
           </>
         )}
       </Stack.Navigator>

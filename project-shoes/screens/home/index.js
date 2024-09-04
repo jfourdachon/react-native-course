@@ -1,23 +1,17 @@
-import {
-  SafeAreaView,
-  View,
-  StyleSheet,
-  StatusBar,
-  ScrollView,
-} from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, View } from "react-native";
 import { colors } from "../../constants/colors";
 import SearchSection from "./searchSection";
 import ListSection from "./listSection";
 import NewsSection from "./newsSection";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [inputValue, setInputValue] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("nike");
-
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar />
+    <View style={[styles.container]}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
         bounces={false}
@@ -35,7 +29,7 @@ export default function HomeScreen({ navigation }) {
         />
         <NewsSection selectedBrand={selectedBrand} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
