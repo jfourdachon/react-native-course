@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jdev9999"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +27,8 @@
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.jdev9999.projectshoes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,7 +41,8 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
-      "expo-notifications"
+      "expo-notifications",
+      "react-native-iap"
     ],
     "extra": {
       "eas": {
