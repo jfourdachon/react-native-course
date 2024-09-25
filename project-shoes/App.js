@@ -13,6 +13,8 @@ import { store } from "./store/store";
 import { getApps, initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebaseConfig";
 import { linkingConfig } from "./utils/linking";
+import { StatusBar } from "react-native";
+import { colors } from "./constants/colors";
 
 export default function App() {
   const apps = getApps();
@@ -32,6 +34,7 @@ export default function App() {
           <MainStackNavigator />
         </NavigationContainer>
       </SafeAreaProvider>
+      <StatusBar barStyle={"dark-content"} backgroundColor={colors.LIGHT} />
     </Provider>
   ) : null;
 }
