@@ -75,7 +75,7 @@ export default function Details({ route, navigation }) {
       <AnimatedHeader
         shouldAnimate={shouldAnimate}
         setShouldAnimate={setShouldAnimate}
-        cartCount={user?.cart?.shoes.length ?? 0}
+        cartCount={user?.cart?.shoes?.length ?? 0}
       />
       <View style={styles.container}>
         <DetailsImage source={selectedImage} />
