@@ -17,12 +17,6 @@
       },
       "env": {
          // Variables d'environnement pour les test
-        "EXPO_PUBLIC_API_URL":"https://shoes-project-91879-default-rtdb.europe-west1.firebasedatabase.app/",
-        "EXPO_PUBLIC_AUTH_URL":"https://identitytoolkit.googleapis.com/v1/accounts",
-        "EXPO_PUBLIC_FIREBASE_API_KEY":"AIzaSyC7C5e9P4LIM26bh2hhN464jJOlKeoSnvY",
-        "EXPO_PUBLIC_FIREBASE_TOKEN_URL":"https://securetoken.googleapis.com/v1/token?key=",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_URL":"shoes-project-91879.appspot.com",
-        "EXPO_PUBLIC_STRIPE_URL":"https://expo-stripe-server-example.glitch.me"
       }
     },
     "production": {
@@ -32,12 +26,7 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL":"https://shoes-project-91879-default-rtdb.europe-west1.firebasedatabase.app/",
-        "EXPO_PUBLIC_AUTH_URL":"https://identitytoolkit.googleapis.com/v1/accounts",
-        "EXPO_PUBLIC_FIREBASE_API_KEY":"AIzaSyC7C5e9P4LIM26bh2hhN464jJOlKeoSnvY",
-        "EXPO_PUBLIC_FIREBASE_TOKEN_URL":"https://securetoken.googleapis.com/v1/token?key=",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_URL":"shoes-project-91879.appspot.com",
-        "EXPO_PUBLIC_STRIPE_URL":"https://expo-stripe-server-example.glitch.me"
+        // Variables d'environnements pour la production
       }
     }
   },
