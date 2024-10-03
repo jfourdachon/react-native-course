@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import reactotron from "../ReactotronConfig";
 import favoriteReducer from "./slices/favoritesSlice";
 import notificationReducer from "./slices/notificationsSlice";
 import cartReducer from "./slices/cartSlice";
@@ -34,5 +33,9 @@ export const store = configureStore({
       .concat(authApi.middleware)
       .concat(stripeApi.middleware),
   enhancers: (getDEfaultEnhancer) =>
-    getDEfaultEnhancer().concat(reactotron.createEnhancer()),
+    __DEV__
+      ? getDEfaultEnhancer().concat(
+          require("../ReactotronConfig").default.createEnhancer()
+        )
+      : getDEfaultEnhancer(),
 });
