@@ -48,7 +48,7 @@ export default function DrawerNavigator() {
       screenOptions={{
         drawerStyle: {
           backgroundColor: colors.DARK,
-          width: "70%",
+          width: "72%",
         },
         overlayColor: "transparent",
         sceneContainerStyle: {
