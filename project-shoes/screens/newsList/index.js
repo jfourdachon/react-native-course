@@ -1,16 +1,16 @@
-import { View, StyleSheet, FlatList } from "react-native";
-import { colors } from "../../constants/colors";
-import { shoes } from "../../data/shoes";
-import VerticalCard from "../../ui-components/cards/VerticalCard";
-import ListItemSeparator from "../../ui-components/separators/ListItemSeparator";
-import { spaces } from "../../constants/spaces";
+import { View, StyleSheet, FlatList } from "react-native"
+import { colors } from "../../constants/colors"
+import { shoes } from "../../data/shoes"
+import VerticalCard from "../../ui-components/cards/VerticalCard"
+import ListItemSeparator from "../../ui-components/separators/ListItemSeparator"
+import { spaces } from "../../constants/spaces"
 
 export default function NewsList({ navigation }) {
   const items = shoes.map((brand) => {
-    return brand.stock.find((item) => item.new);
-  });
+    return brand.stock.find((item) => item.new)
+  })
 
-  const navigateToDetails = (id) => navigation.navigate("Details", { id });
+  const navigateToDetails = (id) => navigation.navigate("Details", { id })
 
   const renderItem = ({ item }) => (
     <View style={styles.cardContainer}>
@@ -20,7 +20,7 @@ export default function NewsList({ navigation }) {
         onPress={() => navigateToDetails(item.id)}
       />
     </View>
-  );
+  )
   return (
     <FlatList
       data={items}
@@ -31,7 +31,7 @@ export default function NewsList({ navigation }) {
       ItemSeparatorComponent={<ListItemSeparator height={spaces.L} />}
       contentContainerStyle={styles.contentStyle}
     />
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.LIGHT,
     paddingTop: spaces.L,
+    paddingHorizontal: spaces.XS,
   },
   contentStyle: {
     paddingBottom: spaces.XL,
@@ -49,4 +50,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-});
+})

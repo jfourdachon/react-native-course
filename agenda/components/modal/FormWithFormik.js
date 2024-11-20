@@ -188,8 +188,8 @@ export default function FormWithFormik({
           }) => {
             if (
               isSubmitting &&
-              Object.keys(errors).length &&
-              status !== "error"
+              status !== "error" &&
+              (!values.title || Object.keys(errors).length)
             ) {
               setStatus("error");
             }

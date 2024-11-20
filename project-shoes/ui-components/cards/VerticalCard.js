@@ -135,6 +135,8 @@ const styles = StyleSheet.create({
     height: spaces.M,
     borderRadius: radius.FULL,
     marginHorizontal: spaces.XS,
+    borderWidth: 1,
+    borderColor: colors.GREY,
   },
   btn: {
     position: "absolute",

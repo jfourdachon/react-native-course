@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.LIGHT,
     paddingTop: spaces.L,
+    paddingHorizontal: spaces.XS,
   },
   contentStyle: {
     paddingBottom: spaces.XL,
