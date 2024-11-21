@@ -4,7 +4,7 @@ import { shoes } from "../../data/shoes";
 import VerticalCard from "../../ui-components/cards/VerticalCard";
 import ListItemSeparator from "../../ui-components/separators/ListItemSeparator";
 import { spaces } from "../../constants/spaces";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { SCREEN_HEIGHT } from "../../constants/sizes";
 
 export default function List({ route, navigation }) {
@@ -30,12 +30,7 @@ export default function List({ route, navigation }) {
     </View>
   );
   return (
-    <View
-      style={{
-        height: SCREEN_HEIGHT - 106,
-        paddingTop: spaces.L,
-      }}
-    >
+    <View style={styles.container}>
       <FlatList
         data={data.stock}
         keyExtractor={(item) => item.id}
@@ -43,17 +38,25 @@ export default function List({ route, navigation }) {
         showsVerticalScrollIndicator={false}
         numColumns={2}
         ItemSeparatorComponent={<ListItemSeparator height={spaces.L} />}
-        contentContainerStyle={{ paddingBottom: spaces.XL * 2, flexGrow: 1 }} // Ajoute un padding en bas
+        contentContainerStyle={styles.contentStyle} // Ajoute un padding en bas
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: SCREEN_HEIGHT,
+    paddingVertical: spaces.L,
+    paddingBottom: 106,
+  },
   cardContainer: {
     flex: 0.5,
     height: 240,
     justifyContent: "center",
     alignItems: "center",
+  },
+  contentStyle: {
+    paddingBottom: spaces.XL,
   },
 });
