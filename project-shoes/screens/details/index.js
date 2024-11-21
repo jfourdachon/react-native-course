@@ -13,6 +13,7 @@ import {
   useUpdateUserMutation,
 } from "../../store/api/userApi";
 import AnimatedHeader from "./components/AnimatedHeader";
+import { SCREEN_HEIGHT } from "../../constants/sizes";
 
 export default function Details({ route, navigation }) {
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -71,47 +72,53 @@ export default function Details({ route, navigation }) {
   }, [route.params.id]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <AnimatedHeader
-        shouldAnimate={shouldAnimate}
-        setShouldAnimate={setShouldAnimate}
-        cartCount={user?.cart?.shoes?.length ?? 0}
-      />
-      <View style={styles.container}>
-        <DetailsImage source={selectedImage} />
-        <DetailsDescription
-          name={data.name}
-          price={data.price}
-          description={data.description}
-          id={route.params.id}
+    <View
+      style={{
+        height: SCREEN_HEIGHT - 106,
+      }}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <AnimatedHeader
+          shouldAnimate={shouldAnimate}
+          setShouldAnimate={setShouldAnimate}
+          cartCount={user?.cart?.shoes?.length ?? 0}
         />
-        <Gallery
-          images={images}
-          setSelectedImage={setSelectedImage}
-          selectedImage={selectedImage}
-        />
-        <Sizes
-          sizes={sizes}
-          selectedSize={selectedSize}
-          setSelectedSize={setSelectedSize}
-        />
-        <View style={styles.btnContainer}>
-          <CustomButton
-            text="Ajouter au panier"
-            onPress={addToCart}
-            isLoading={isUpdating}
+        <View style={styles.container}>
+          <DetailsImage source={selectedImage} />
+          <DetailsDescription
+            name={data.name}
+            price={data.price}
+            description={data.description}
+            id={route.params.id}
           />
+          <Gallery
+            images={images}
+            setSelectedImage={setSelectedImage}
+            selectedImage={selectedImage}
+          />
+          <Sizes
+            sizes={sizes}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+          />
+          <View style={styles.btnContainer}>
+            <CustomButton
+              text="Ajouter au panier"
+              onPress={addToCart}
+              isLoading={isUpdating}
+            />
+          </View>
+          <View style={styles.fixView} />
         </View>
-        <View style={styles.fixView} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    bottom: Platform.select({ android: 80, ios: 100 }),
+    bottom: Platform.select({ android: 120, ios: 100 }),
   },
   btnContainer: {
     width: "80%",
@@ -119,7 +126,7 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     marginVertical: spaces.XL,
   },
-  fixView: {
-    marginBottom: Platform.select({ android: -80, ios: -100 }),
-  },
+  // fixView: {
+  //   // marginBottom: Platform.select({ android: -80, ios: -100 }),
+  // },
 });
