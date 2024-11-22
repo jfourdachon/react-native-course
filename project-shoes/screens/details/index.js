@@ -72,11 +72,7 @@ export default function Details({ route, navigation }) {
   }, [route.params.id]);
 
   return (
-    <View
-      style={{
-        height: SCREEN_HEIGHT - 106,
-      }}
-    >
+    <View style={styles.mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <AnimatedHeader
           shouldAnimate={shouldAnimate}
@@ -108,7 +104,6 @@ export default function Details({ route, navigation }) {
               isLoading={isUpdating}
             />
           </View>
-          <View style={styles.fixView} />
         </View>
       </ScrollView>
     </View>
@@ -116,9 +111,12 @@ export default function Details({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    height: SCREEN_HEIGHT,
+  },
   container: {
     position: "relative",
-    bottom: Platform.select({ android: 120, ios: 100 }),
+    bottom: 120,
   },
   btnContainer: {
     width: "80%",
@@ -126,7 +124,4 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     marginVertical: spaces.XL,
   },
-  // fixView: {
-  //   // marginBottom: Platform.select({ android: -80, ios: -100 }),
-  // },
 });
