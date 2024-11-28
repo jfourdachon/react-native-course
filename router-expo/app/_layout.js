@@ -1,13 +1,5 @@
-import { Slot } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Slot } from "expo-router"
 
-export default function HomeLayout() {
-  return( <View style={styles.layoutContainer}><Slot /></View>)
+export default function RootLayout() {
+  return <Slot />
 }
-
-const styles = StyleSheet.create({
-    layoutContainer: {
-        backgroundColor: "salmon",
-        flex:1
-    }
-})
