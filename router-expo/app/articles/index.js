@@ -1,10 +1,11 @@
 import { Link } from "expo-router"
 import { StyleSheet, Text, View } from "react-native"
 import { colors } from "../../constants/colors"
+import { articeStyles } from "./_layout"
 
 export default function ArticlesPage() {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, articeStyles.borderTopPage]}>
       <Text style={styles.title}>Tous les articles</Text>
       <Link
         href={{

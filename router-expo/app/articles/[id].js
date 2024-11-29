@@ -1,16 +1,25 @@
-import { Link, useLocalSearchParams } from "expo-router"
-import { StyleSheet, Text, View } from "react-native"
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { colors } from "../../constants/colors"
+import { articeStyles } from "./_layout"
 
 export default function ArticleDetailsPage() {
-  const { id } = useLocalSearchParams()
+  const { id, dismissCount } = useLocalSearchParams()
+  const router = useRouter()
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, articeStyles.borderTopPage]}>
+      <Stack.Screen options={{ title: "Article: " + id }} />
       <Text style={styles.title}>Id de l'article</Text>
       <Text style={styles.title}>{id}</Text>
-      <Link href="/articles" style={styles.link}>
+      <TouchableOpacity
+        style={styles.link}
+        onPress={() => {
+          // router.dismissAll()
+          router.dismiss(dismissCount)
+        }}
+      >
         <Text style={styles.text}>Revenir à tous les articles</Text>
-      </Link>
+      </TouchableOpacity>
     </View>
   )
 }

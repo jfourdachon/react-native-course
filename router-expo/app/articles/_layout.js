@@ -1,35 +1,49 @@
-import { Slot } from "expo-router"
-import { SafeAreaView, StyleSheet, Text, View } from "react-native"
+import { Stack, useRouter } from "expo-router"
+import AntDesign from "@expo/vector-icons/AntDesign"
+import { StyleSheet } from "react-native"
 import { colors } from "../../constants/colors"
 
 export default function RootLayout() {
+  const router = useRouter()
   return (
-    <SafeAreaView style={styles.layoutContainer}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Articles</Text>
-      </View>
-      <Slot />
-    </SafeAreaView>
+    <Stack
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: colors.dark,
+        },
+        headerTintColor: colors.primary,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: colors.dark,
+        },
+        headerLeft: () => (
+          <AntDesign
+            name="stepbackward"
+            size={24}
+            color={colors.primary}
+            onPress={() => router.back()}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Articles",
+        }}
+      />
+      <Stack.Screen
+        name="favorites/[ids]"
+        options={{ title: "Articles favoris" }}
+      />
+      <Stack.Screen name="[id]" />
+    </Stack>
   )
 }
 
-export const styles = StyleSheet.create({
-  layoutContainer: {
-    flex: 1,
-    backgroundColor: colors.dark,
-    alignItems: "center",
-  },
-  titleContainer: {
-    width: "100%",
-    alignItems: "center",
-    padding: 16,
-    marginTop: 12,
-    borderBottomWidth: 1,
-    borderColor: colors.primary,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: colors.primary,
+export const articeStyles = StyleSheet.create({
+  borderTopPage: {
+    borderTopWidth: 1,
+    borderTopColor: colors.primary,
   },
 })
