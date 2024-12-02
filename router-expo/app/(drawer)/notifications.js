@@ -1,13 +1,22 @@
 import { Link } from "expo-router"
 import { StyleSheet, Text, View } from "react-native"
 import { colors } from "../../constants/colors"
+import Drawer from "expo-router/drawer"
 
-export default function HomePage() {
+export default function NotificationsPage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenue sur la page d'accueil</Text>
+      <Drawer.Screen
+        options={{
+          headerTitleStyle: {
+            color: colors.primary,
+          },
+          title: "Notifications Push",
+        }}
+      />
+      <Text style={styles.title}>Vos notifications</Text>
       <Link href="/" style={styles.link}>
-        <Text style={styles.text}>Revenir sur l'écran de bienvenue</Text>
+        <Text style={styles.text}>Revenir à l'écran d'accueil</Text>
       </Link>
     </View>
   )
@@ -20,6 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24,
   },
+
   title: {
     fontSize: 32,
     fontWeight: "bold",
