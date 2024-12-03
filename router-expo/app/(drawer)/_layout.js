@@ -45,8 +45,9 @@ export default function Layout() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen
-          name="index"
+          name="(tabs)"
           options={{
+            headerShown: false,
             title: "Accueil",
             drawerLabel: "Accueil",
             drawerIcon: ({ color }) => (

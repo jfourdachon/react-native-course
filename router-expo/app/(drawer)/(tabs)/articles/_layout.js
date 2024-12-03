@@ -1,7 +1,7 @@
 import { Stack, useRouter } from "expo-router"
 import AntDesign from "@expo/vector-icons/AntDesign"
 import { StyleSheet } from "react-native"
-import { colors } from "../../constants/colors"
+import { colors } from "../../../../constants/colors"
 
 export default function RootLayout() {
   const router = useRouter()
@@ -24,6 +24,7 @@ export default function RootLayout() {
             onPress={() => router.back()}
           />
         ),
+        headerShown: false,
       }}
     >
       <Stack.Screen

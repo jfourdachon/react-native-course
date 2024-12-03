@@ -1,11 +1,32 @@
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router"
+import {
+  Link,
+  Stack,
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { colors } from "../../constants/colors"
+import { colors } from "../../../../constants/colors"
 import { articeStyles } from "./_layout"
+import { useEffect } from "react"
 
 export default function ArticleDetailsPage() {
   const { id, dismissCount } = useLocalSearchParams()
   const router = useRouter()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    navigation.getParent().setOptions({
+      title: "Article: " + id,
+      tabBarLabel: "Articles",
+    })
+    return () => {
+      navigation.getParent().setOptions({
+        title: "Articles",
+        tabBarLabel: "Articles",
+      })
+    }
+  }, [navigation, id])
   return (
     <View style={[styles.container, articeStyles.borderTopPage]}>
       <Stack.Screen options={{ title: "Article: " + id }} />

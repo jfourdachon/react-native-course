@@ -1,13 +1,33 @@
-import { Link, useLocalSearchParams, useRouter } from "expo-router"
+import {
+  Link,
+  useLocalSearchParams,
+  useNavigation,
+  useRouter,
+} from "expo-router"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { articeStyles } from "../_layout"
-import { colors } from "../../../constants/colors"
+import { colors } from "../../../../../constants/colors"
+import { useEffect } from "react"
 
 export default function FavoritesPage() {
   const params = useLocalSearchParams()
   const ids = JSON.parse(params.ids)
 
   const router = useRouter()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    navigation.getParent().setOptions({
+      title: "Articles favoris",
+      tabBarLabel: "Articles",
+    })
+    return () => {
+      navigation.getParent().setOptions({
+        title: "Articles",
+        tabBarLabel: "Articles",
+      })
+    }
+  }, [navigation])
   return (
     <View style={[styles.container, articeStyles.borderTopPage]}>
       <Text style={styles.title}>Les articles favoris</Text>

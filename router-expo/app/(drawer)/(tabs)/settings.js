@@ -1,13 +1,13 @@
 import { Link } from "expo-router"
 import { StyleSheet, Text, View } from "react-native"
-import { colors } from "../../constants/colors"
+import { colors } from "../../../constants/colors"
 
-export default function HomePage() {
+export default function SettingsPage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenue sur l'écran d'accueil</Text>
-      <Link href="/notifications" style={styles.link}>
-        <Text style={styles.text}>Voir les notifications</Text>
+      <Text style={styles.title}>Bienvenue sur la page des réglages</Text>
+      <Link href="/" style={styles.link}>
+        <Text style={styles.text}>Aller sur l'écran d'accueil</Text>
       </Link>
     </View>
   )
