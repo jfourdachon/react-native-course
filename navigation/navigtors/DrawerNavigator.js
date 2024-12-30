@@ -3,13 +3,13 @@ import {
   DrawerItem,
   DrawerItemList,
   createDrawerNavigator,
-} from "@react-navigation/drawer";
-import Screen7 from "../screens/Screen7";
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import BottomTabsNavigator from "./BottomTabsNavigator";
+} from "@react-navigation/drawer"
+import Screen7 from "../screens/Screen7"
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons"
+import { Pressable } from "react-native"
+import BottomTabsNavigator from "./BottomTabsNavigator"
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator()
 
 export default function DrawerNavigator() {
   return (
@@ -47,8 +47,14 @@ export default function DrawerNavigator() {
               <Pressable
                 style={{ marginRight: 16 }}
                 onPress={() =>
-                  navigation.navigate("Screen2", {
-                    name: "john",
+                  navigation.navigate("Navigation", {
+                    screen: "Home",
+                    params: {
+                      screen: "Screen2",
+                      params: {
+                        name: "John",
+                      },
+                    },
                   })
                 }
               >
@@ -68,7 +74,7 @@ export default function DrawerNavigator() {
         />
       </Drawer.Group>
     </Drawer.Navigator>
-  );
+  )
 }
 
 function CustomDrawerContent(props) {
@@ -81,5 +87,5 @@ function CustomDrawerContent(props) {
         icon={() => <MaterialIcons name="logout" size={24} color="black" />}
       />
     </DrawerContentScrollView>
-  );
+  )
 }

@@ -1,10 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Screen1 from "../screens/Screen1";
-import Screen2 from "../screens/Screen2";
-import { AntDesign } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import Screen1 from "../screens/Screen1"
+import Screen2 from "../screens/Screen2"
+import { AntDesign } from "@expo/vector-icons"
+import { Pressable } from "react-native"
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 export default function StackNavigator() {
   return (
     <Stack.Navigator
@@ -26,17 +26,17 @@ export default function StackNavigator() {
         name="Screen1"
         options={({ navigation }) => ({
           title: "Home",
-          headerRight: () => (
-            <Pressable
-              onPress={() =>
-                navigation.navigate("Screen2", {
-                  name: "john",
-                })
-              }
-            >
-              <AntDesign name="user" size={24} color="black" />
-            </Pressable>
-          ),
+          // headerRight: () => (
+          //   <Pressable
+          //     onPress={() =>
+          //       navigation.navigate("Screen2", {
+          //         name: "john",
+          //       })
+          //     }
+          //   >
+          //     <AntDesign name="user" size={24} color="black" />
+          //   </Pressable>
+          // ),
         })}
       />
       <Stack.Screen
@@ -50,9 +50,9 @@ export default function StackNavigator() {
                 <AntDesign name="leftcircle" size={24} color="black" />
               </Pressable>
             ),
-          };
+          }
         }}
       />
     </Stack.Navigator>
-  );
+  )
 }

@@ -3,28 +3,29 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
-} from "@react-navigation/drawer";
-import BottomTabsNavigator from "./BottomTabsNavigator";
-import { Image, StyleSheet, Text, View } from "react-native";
-import TextBoldXL from "../ui-components/texts/TextBoldXL";
-import { spaces } from "../constants/spaces";
-import { radius } from "../constants/radius";
-import { colors } from "../constants/colors";
-import { MaterialIcons } from "@expo/vector-icons";
-import { SMALL_ICON_SIZE } from "../constants/sizes";
-import HomeIcon from "../assets/images/navigation/home.svg";
-import ProfileIcon from "../assets/images/navigation/user.svg";
-import CartIcon from "../assets/images/navigation/cart.svg";
-import NotificationsIcon from "../assets/images/navigation/notifications.svg";
-import FavoriteIcon from "../assets/images/navigation/favorite.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetUserByIdQuery } from "../store/api/userApi";
-import { setToken } from "../store/slices/authSlice";
-import * as SecureStore from "expo-secure-store";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useNotifications } from "../utils/notifications";
+} from "@react-navigation/drawer"
+import BottomTabsNavigator from "./BottomTabsNavigator"
+import { Image, Platform, StyleSheet, Text, View } from "react-native"
+import TextBoldXL from "../ui-components/texts/TextBoldXL"
+import { spaces } from "../constants/spaces"
+import { radius } from "../constants/radius"
+import { colors } from "../constants/colors"
+import { MaterialIcons } from "@expo/vector-icons"
+import { SMALL_ICON_SIZE } from "../constants/sizes"
+import HomeIcon from "../assets/images/navigation/home.svg"
+import ProfileIcon from "../assets/images/navigation/user.svg"
+import CartIcon from "../assets/images/navigation/cart.svg"
+import NotificationsIcon from "../assets/images/navigation/notifications.svg"
+import FavoriteIcon from "../assets/images/navigation/favorite.svg"
+import { useDispatch, useSelector } from "react-redux"
+import { useGetUserByIdQuery } from "../store/api/userApi"
+import { setToken } from "../store/slices/authSlice"
+import * as SecureStore from "expo-secure-store"
+import FontAwesome from "@expo/vector-icons/FontAwesome"
+import { useNotifications } from "../utils/notifications"
+import { useNavigation } from "@react-navigation/native"
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator()
 
 const routes = [
   { name: "HomeStack", label: "Accueil", icon: HomeIcon, index: 0 },
@@ -37,11 +38,11 @@ const routes = [
     index: 3,
   },
   { name: "Profile", label: "Profil", icon: ProfileIcon, index: 4 },
-];
+]
 
 export default function DrawerNavigator() {
-  const { expoPushToken } = useNotifications();
-  console.log(expoPushToken);
+  const { expoPushToken } = useNotifications()
+  console.log(expoPushToken)
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -51,7 +52,7 @@ export default function DrawerNavigator() {
           width: "72%",
         },
         overlayColor: "transparent",
-        sceneContainerStyle: {
+        sceneStyle: {
           backgroundColor: colors.DARK,
         },
         headerShown: false,
@@ -59,7 +60,7 @@ export default function DrawerNavigator() {
     >
       <Drawer.Screen component={BottomTabsNavigator} name="BottomTabs" />
     </Drawer.Navigator>
-  );
+  )
 }
 
 const Label = ({ shoesInCartCount, label, activeIndex, index }) => {
@@ -79,20 +80,21 @@ const Label = ({ shoesInCartCount, label, activeIndex, index }) => {
     >
       {label}
     </Text>
-  );
-};
+  )
+}
 
 function CustomDrawerContent(props) {
-  const dispatch = useDispatch();
-  const { userId, token } = useSelector((state) => state.auth);
-  const { data: user } = useGetUserByIdQuery({ userId, token });
-  const activeIndex = props.state.routes[0].state?.index || 0;
-  const shoesInCartCount = user?.cart?.shoes?.length;
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const { userId, token } = useSelector((state) => state.auth)
+  const { data: user } = useGetUserByIdQuery({ userId, token })
+  const activeIndex = props.state.routes[0].state?.index || 0
+  const shoesInCartCount = user?.cart?.shoes?.length
 
   const logout = () => {
-    dispatch(setToken());
-    SecureStore.deleteItemAsync("refreshToken");
-  };
+    dispatch(setToken())
+    SecureStore.deleteItemAsync("refreshToken")
+  }
   return (
     <DrawerContentScrollView>
       <View style={styles.userInfosContainer}>
@@ -130,12 +132,18 @@ function CustomDrawerContent(props) {
                 shoesInCartCount && route.label === "Panier"
                   ? colors.BLUE
                   : activeIndex === route.index
-                  ? colors.WHITE
-                  : colors.GREY
+                    ? colors.WHITE
+                    : colors.GREY
               }
             />
           )}
-          onPress={() => props.navigation.navigate(route.name)}
+          onPress={() => {
+            if (route.name === "MainCart") {
+              navigation.navigate(route.name)
+            } else {
+              props.navigation.navigate("BottomTabs", { screen: route.name })
+            }
+          }}
           labelStyle={[
             styles.label,
             { color: activeIndex === route.index ? colors.WHITE : colors.GREY },
@@ -157,7 +165,7 @@ function CustomDrawerContent(props) {
         onPress={logout}
       />
     </DrawerContentScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -200,4 +208,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: radius.FULL,
   },
-});
+})

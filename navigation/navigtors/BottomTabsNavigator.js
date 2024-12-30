@@ -1,13 +1,14 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Screen3 from "../screens/Screen3";
-import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import StackNavigator from "./StackNavigator";
-import TopTabsNavigator from "./TopTabsNavigator";
-const Tab = createBottomTabNavigator();
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import Screen3 from "../screens/Screen3"
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import StackNavigator from "./StackNavigator"
+import TopTabsNavigator from "./TopTabsNavigator"
+import { TouchableOpacity } from "react-native"
+const Tab = createBottomTabNavigator()
 
 export default function BottomTabsNavigator() {
-  const inset = useSafeAreaInsets();
+  const inset = useSafeAreaInsets()
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,8 +28,15 @@ export default function BottomTabsNavigator() {
         tabBarStyle: {
           height: 80 + inset.bottom,
         },
+        tabBarIconStyle: {
+          top: "50%",
+          transform: [{ translateY: -14 }],
+        },
         tabBarActiveBackgroundColor: "#e6e8f5",
         tabBarShowLabel: false,
+        tabBarButton: (props) => (
+          <TouchableOpacity {...props} activeOpacity={1} />
+        ),
         headerShown: false,
       }}
     >
@@ -37,7 +45,7 @@ export default function BottomTabsNavigator() {
         name="Home"
         options={{
           tabBarIcon: ({ color }) => (
-            <AntDesign name="home" size={32} color={color} />
+            <AntDesign name="home" size={28} color={color} />
           ),
         }}
       />
@@ -47,7 +55,7 @@ export default function BottomTabsNavigator() {
         initialParams={{ name: "David" }}
         options={{
           tabBarIcon: ({ color }) => (
-            <Feather name="settings" size={32} color={color} />
+            <Feather name="settings" size={28} color={color} />
           ),
         }}
       />
@@ -56,10 +64,10 @@ export default function BottomTabsNavigator() {
         name="Articles"
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="journal-sharp" size={32} color={color} />
+            <Ionicons name="journal-sharp" size={28} color={color} />
           ),
         }}
       />
     </Tab.Navigator>
-  );
+  )
 }
